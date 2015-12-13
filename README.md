@@ -5,11 +5,11 @@ It sends a desktop notification if there are any updates in issues.
 
 ## Downloads
 
-Installers for OS X and Windows can be found on the [releases](/releases) page.
+Installers for OS X and Windows can be found on the [releases](../../releases) page.
 
 ## Settings
 
-![Settings](assets/redmine_notifier_settings.png)
+![Settings](assets/osx/redmine_notifier_settings.png)
 
 The icon appears in the menu bar or task tray when Redmine Notifier is started.
 Select "Preferences" in the context menu to open the settings window.
