@@ -1,0 +1,16 @@
+{
+  "name": "redmine-notifier",
+  "version": "0.1.0",
+  "description": "An updated issues checker for Redmine.",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emsk/redmine-notifier.git"
+  },
+  "author": "emsk",
+  "license": "MIT",
+  "dependencies": {
+    "node-notifier": "^4.4.0",
+    "notie": "^2.1.0"
+  }
+}
