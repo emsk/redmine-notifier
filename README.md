@@ -46,6 +46,6 @@ See `scripts` in [`package.json`](package.json) with regard to other commands.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-## Licence
+## License
 
 MIT
