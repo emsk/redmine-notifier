@@ -10,8 +10,8 @@
     "build:osx": "npm run clean:osx && electron-packager ./app \"Redmine Notifier\" --platform=darwin --arch=x64 --version=0.36.0 --out=./dist/osx --icon=./assets/osx/redmine_notifier.icns --ignore=\"\\.DS_Store|npm-debug\\.log\"",
     "build:win": "npm run clean:win && electron-packager ./app \"Redmine Notifier\" --platform=win32 --arch=x64 --version=0.36.0 --out=./dist/win --icon=./assets/win/redmine_notifier.ico --ignore=\"\\.DS_Store|npm-debug\\.log\" --version-string.CompanyName=\"emsk\" --version-string.LegalCopyright=\"Copyright (c) 2015 emsk\" --version-string.FileDescription=\"Redmine Notifier\" --version-string.OriginalFilename=\"\" --version-string.FileVersion=\"0.1.0\" --version-string.ProductVersion=\"0.1.0\" --version-string.ProductName=\"Redmine Notifier\" --version-string.InternalName=\"\"",
     "pack": "npm run pack:osx && npm run pack:win",
-    "pack:osx": "npm run build:osx && electron-builder \"./dist/osx/Redmine Notifier-darwin-x64/Redmine Notifier.app\" --platform=osx --out=./dist/osx --config=./config.json",
-    "pack:win": "npm run build:win && electron-builder \"./dist/win/Redmine Notifier-win32-x64\" --platform=win --out=./dist/win --config=./config.json"
+    "pack:osx": "npm run build:osx && electron-builder \"./dist/osx/Redmine Notifier-darwin-x64/Redmine Notifier.app\" --platform=osx --out=./dist/osx --config=./config.json && mv \"./dist/osx/Redmine Notifier.dmg\" ./dist/osx/RedmineNotifierSetup.dmg",
+    "pack:win": "npm run build:win && electron-builder \"./dist/win/Redmine Notifier-win32-x64\" --platform=win --out=./dist/win --config=./config.json && mv \"./dist/win/Redmine Notifier Setup.exe\" ./dist/win/RedmineNotifierSetup.exe"
   },
   "devDependencies": {
     "electron-builder": "^2.4.0",
