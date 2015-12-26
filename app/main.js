@@ -1,8 +1,6 @@
 'use strict';
 
 (function() {
-  require('crash-reporter').start();
-
   const BLACK_ICON_FILENAME_24 = 'redmine_icon_black_24.png';
   const COLOR_ICON_FILENAME_24 = 'redmine_icon_color_24.png';
 
