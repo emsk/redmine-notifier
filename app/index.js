@@ -6,10 +6,11 @@
   const NOTIE_DISPLAY_SEC = 1.5;
   const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
 
-  var notie = require('notie');
-  var remote = require('remote');
-  var notifier = remote.require('node-notifier');
+  var remote = window.require('remote');
   var shell = remote.require('shell');
+  var fs = require('fs');
+  var notie = require('notie');
+  var notifier = require('node-notifier');
 
   /**
    * Initialize the RedmineNotifier object.
@@ -197,11 +198,18 @@
 
     if (issueCount === 0) return;
 
+    var appDir = __dirname + '.unpacked'; // Production
+    try {
+      fs.statSync(appDir);
+    } catch(e) {
+      appDir = __dirname; // Development
+    }
+
     // Display the latest issue's subject only
     notifier.notify({
       title: '(' + issueCount + ') Redmine Notifier',
       message: issues[0].subject,
-      icon: __dirname + '/images/' + COLOR_ICON_FILENAME_64,
+      icon: appDir + '/images/' + COLOR_ICON_FILENAME_64,
       wait: true
     });
 
