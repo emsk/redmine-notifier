@@ -1,6 +1,6 @@
 {
   "name": "redmine-notifier",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An updated issues checker for Redmine.",
   "main": "main.js",
   "repository": {

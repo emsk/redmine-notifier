@@ -11,7 +11,7 @@
   },
   "win": {
     "title": "Redmine Notifier",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "icon": "./assets/win/redmine_notifier.ico"
   }
 }
