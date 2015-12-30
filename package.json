@@ -3,8 +3,7 @@
   "version": "0.2.0",
   "scripts": {
     "start": "electron ./app/main.js",
-    "clean": "rm -rf ./dist",
-    "build": "npm run clean && npm run build:osx && npm run build:win",
+    "build": "npm run build:osx && npm run build:win",
     "build:osx": "./bin/build-osx.sh",
     "build:win": "./bin/build-win.sh",
     "pack": "npm run pack:osx && npm run pack:win",
