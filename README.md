@@ -1,5 +1,6 @@
 # Redmine Notifier
 
+[![Code Climate](https://codeclimate.com/github/emsk/redmine-notifier/badges/gpa.svg)](https://codeclimate.com/github/emsk/redmine-notifier)
 [![Dependency Status](https://gemnasium.com/emsk/redmine-notifier.svg)](https://gemnasium.com/emsk/redmine-notifier)
 
 Redmine Notifier is a simple updated issues checker that runs in the background.
