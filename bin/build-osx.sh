@@ -1,6 +1,6 @@
 #!/bin/bash
 cd `dirname $0`
-./build-node-modules.sh
+npm install --prefix ../app
 rm -rf ../dist/osx
 electron-packager ../app 'Redmine Notifier' \
   --platform=darwin \
