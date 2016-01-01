@@ -1,8 +1,8 @@
 {
   "osx": {
     "title": "Redmine Notifier",
-    "background": "./assets/osx/redmine_notifier_installer.png",
-    "icon": "./assets/osx/redmine_notifier.icns",
+    "background": "../assets/osx/redmine_notifier_installer.png",
+    "icon": "../assets/osx/redmine_notifier.icns",
     "icon-size": 120,
     "contents": [
       { "x": 370, "y": 300, "type": "link", "path": "/Applications" },
