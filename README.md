@@ -1,5 +1,7 @@
 # Redmine Notifier
 
+[![Dependency Status](https://gemnasium.com/emsk/redmine-notifier.svg)](https://gemnasium.com/emsk/redmine-notifier)
+
 Redmine Notifier is a simple updated issues checker that runs in the background.
 It sends a desktop notification if there are any updates in issues.
 
