@@ -10,7 +10,7 @@ electron-packager ../app 'Redmine Notifier' \
   --icon=../assets/win/redmine_notifier.ico \
   --asar \
   --asar-unpack='**/app/{node_modules/node-notifier/vendor,images}/**' \
-  --ignore='\.DS_Store|npm-debug\.log|/etc' \
+  --ignore='\.DS_Store|npm-debug\.log|^/etc' \
   --version-string.CompanyName='emsk' \
   --version-string.LegalCopyright='Copyright (c) 2015 emsk' \
   --version-string.FileDescription='Redmine Notifier' \

@@ -10,4 +10,4 @@ electron-packager ../app 'Redmine Notifier' \
   --icon=../assets/osx/redmine_notifier.icns \
   --asar \
   --asar-unpack='**/app/{node_modules/node-notifier/vendor,images}/**' \
-  --ignore='\.DS_Store|npm-debug\.log|/etc'
+  --ignore='\.DS_Store|npm-debug\.log|^/etc'
