@@ -52,4 +52,4 @@ See `scripts` in [`package.json`](package.json) with regard to other commands.
 
 ## License
 
-MIT
+[MIT](LICENSE)
