@@ -1,6 +1,6 @@
-'use strict';
-
 (function() {
+  'use strict';
+
   const DEFAULT_FETCH_INTERVAL_SEC = 600;
   const STATIC_REQUEST_PARAMS = '&sort=updated_on:desc';
   const NOTIE_DISPLAY_SEC = 1.5;
@@ -237,5 +237,5 @@
       redmineNotifier.initFetch();
     }
   };
-})();
+}());
 
