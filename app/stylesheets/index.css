@@ -58,8 +58,11 @@ button {
   font: inherit;
   font-size: 0.6em;
   cursor: pointer;
-  outline: none;
   -webkit-app-region: no-drag;
+}
+
+button:focus {
+  outline: none;
 }
 
 button:hover {
