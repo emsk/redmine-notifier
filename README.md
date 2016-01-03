@@ -22,6 +22,13 @@ Select "Preferences" in the context menu to open the settings window.
 
 Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can develop it with web technologies.
 
+### Installing dependencies
+
+```sh
+cd /path/to/redmine-notifier
+npm install
+```
+
 ### Starting app
 
 ```sh
