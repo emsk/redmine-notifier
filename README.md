@@ -22,6 +22,16 @@ Select "Preferences" in the context menu to open the settings window.
 
 Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can develop it with web technologies.
 
+### Dependencies
+
+* [node-notifier](https://github.com/mikaelbr/node-notifier)
+* [notie](https://github.com/jaredreich/notie.js)
+* [electron-builder](https://github.com/loopline-systems/electron-builder)
+* [electron-packager](https://github.com/maxogden/electron-packager)
+* [electron-prebuilt](https://github.com/mafintosh/electron-prebuilt)
+
+See `dependencies` and `devDependencies` in [`package.json`](package.json).
+
 ### Installing dependencies
 
 ```sh
