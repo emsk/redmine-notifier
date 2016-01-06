@@ -11,13 +11,13 @@
     "pack:osx": "./bin/pack-osx.sh",
     "pack:win": "./bin/pack-win.sh"
   },
+  "dependencies": {
+    "node-notifier": "^4.4.0",
+    "notie": "^2.1.0"
+  },
   "devDependencies": {
     "electron-builder": "^2.5.0",
     "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.36.2"
-  },
-  "dependencies": {
-    "node-notifier": "^4.4.0",
-    "notie": "^2.1.0"
   }
 }
