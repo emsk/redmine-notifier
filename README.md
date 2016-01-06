@@ -36,8 +36,7 @@ See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
 ```sh
 cd /path/to/redmine-notifier
-npm install
-npm install --prefix ./app
+npm run prepare
 ```
 
 ### Starting app
