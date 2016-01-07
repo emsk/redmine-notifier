@@ -7,6 +7,10 @@
 Redmine Notifier is a simple updated issues checker that runs in the background.
 It sends a desktop notification if there are any updates in issues.
 
+![Notification Mac 10.10](assets/osx/notification_osx_10.10.png)
+![Notification Win 8.1](assets/win/notification_win_8.1.png)
+![Notification Win 7](assets/win/notification_win_7.png)
+
 ## Downloads
 
 Installers for OS X and Windows can be found on the [releases](../../releases) page.
