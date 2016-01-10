@@ -17,7 +17,7 @@
             Redmine URL (required)
           </th>
           <td class="setting-redmine"><input type="text" id="url" required></td>
-          <td rowspan="2">
+          <td rowspan="3">
             <button id="test-connection-button" tabindex="-1">
               Test connection
             </button>
@@ -29,6 +29,13 @@
             API key (required)
           </th>
           <td class="setting-redmine"><input type="text" id="api-key" required></td>
+        </tr>
+        <tr>
+          <th>
+            <i class="fa fa-star fa-fw"></i>
+            Project ID
+          </th>
+          <td class="setting-number"><input type="number" id="project-id" min="1" pattern="^\d+$"></td>
         </tr>
       </table>
 

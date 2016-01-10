@@ -72,7 +72,7 @@
 
     win = new BrowserWindow({
       width: 850,
-      height: 275,
+      height: 300,
       show: false,
       frame: false,
       resizable: false

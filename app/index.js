@@ -2,7 +2,6 @@
   'use strict';
 
   const DEFAULT_FETCH_INTERVAL_SEC = 600;
-  const STATIC_REQUEST_PARAMS = '&sort=updated_on:desc';
   const NOTIE_DISPLAY_SEC = 1.5;
   const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
 
@@ -65,6 +64,7 @@
   RedmineNotifier.prototype.displaySettings = function() {
     document.getElementById('url').value = this._settings.url;
     document.getElementById('api-key').value = this._settings.apiKey;
+    document.getElementById('project-id').value = this._settings.projectId;
     document.getElementById('fetch-interval-sec').value = this._settings.fetchIntervalSec;
   };
 
@@ -75,6 +75,7 @@
     return {
       url: document.getElementById('url').value,
       apiKey: document.getElementById('api-key').value,
+      projectId: document.getElementById('project-id').value,
       fetchIntervalSec: document.getElementById('fetch-interval-sec').value
     };
   };
@@ -93,6 +94,7 @@
     this._settings = {
       url: localStorage.getItem('url'),
       apiKey: localStorage.getItem('apiKey'),
+      projectId: localStorage.getItem('projectId'),
       fetchIntervalSec: localStorage.getItem('fetchIntervalSec')
     };
   };
@@ -111,6 +113,7 @@
   RedmineNotifier.prototype.updateSettings = function() {
     localStorage.setItem('url', this._settings.url);
     localStorage.setItem('apiKey', this._settings.apiKey);
+    localStorage.setItem('projectId', this._settings.projectId);
     localStorage.setItem('fetchIntervalSec', this._settings.fetchIntervalSec);
   };
 
@@ -146,7 +149,6 @@
   RedmineNotifier.prototype.fetch = function() {
     var _this = this;
     var xhr = new XMLHttpRequest();
-    var requestParams = '?updated_on=%3E%3D' + this._lastExecutionTime + STATIC_REQUEST_PARAMS;
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
@@ -154,7 +156,7 @@
       }
     };
 
-    xhr.open('GET', this._settings.url + '/issues.json' + requestParams);
+    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(this._settings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
 
@@ -167,7 +169,6 @@
   RedmineNotifier.prototype.testConnection = function() {
     var xhr = new XMLHttpRequest();
     var pageSettings = this.getPageSettings();
-    var requestParams = '?updated_on=%3E%3D' + this._lastExecutionTime + STATIC_REQUEST_PARAMS;
 
     xhr.onreadystatechange = function() {
       var style = 3;
@@ -183,9 +184,27 @@
       }
     };
 
-    xhr.open('GET', pageSettings.url + '/issues.json' + requestParams);
+    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(pageSettings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
     xhr.send();
+  };
+
+  /**
+   * Get the request parameters.
+   * @param {string} projectId - Project ID (a numeric value, not a project identifier).
+   * @return {string} Request parameters.
+   */
+  RedmineNotifier.prototype.getRequestParams = function(projectId) {
+    var params = [
+      'updated_on=%3E%3D' + this._lastExecutionTime,
+      'sort=updated_on:desc'
+    ];
+
+    if (projectId !== '') {
+      params.unshift('project_id=' + projectId);
+    }
+
+    return '?' + params.join('&');
   };
 
   /**
