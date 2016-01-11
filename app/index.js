@@ -200,7 +200,7 @@
       'sort=updated_on:desc'
     ];
 
-    if (projectId !== '') {
+    if (typeof projectId === 'string' && projectId !== '') {
       params.unshift('project_id=' + projectId);
     }
 
