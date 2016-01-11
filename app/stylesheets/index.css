@@ -12,6 +12,10 @@
   font-style: normal;
 }
 
+::selection {
+  background-color: #afd7ff;
+}
+
 html {
   width: 100%;
   height: 100%;
