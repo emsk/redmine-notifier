@@ -11,6 +11,9 @@ It sends a desktop notification if there are any updates in issues.
 ![Notification Win 8.1](assets/win/notification_win_8.1.png)
 ![Notification Win 7](assets/win/notification_win_7.png)
 
+The number of issues that were updated after previous fetch is shown in parentheses.
+Also, the subject is shown only about the latest issue.
+
 ## Downloads
 
 Installers for OS X and Windows can be found on the [releases](../../releases) page.
