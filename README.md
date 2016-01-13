@@ -35,8 +35,13 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 
 ### Dependencies
 
+##### Production
+
 * [node-notifier](https://github.com/mikaelbr/node-notifier)
 * [notie](https://github.com/jaredreich/notie.js)
+
+##### Development
+
 * [electron-builder](https://github.com/loopline-systems/electron-builder)
 * [electron-packager](https://github.com/maxogden/electron-packager)
 * [electron-prebuilt](https://github.com/mafintosh/electron-prebuilt)
