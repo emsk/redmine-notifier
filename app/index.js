@@ -151,52 +151,119 @@
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        _this.notify(JSON.parse(xhr.responseText).issues);
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          _this.notify(JSON.parse(xhr.responseText).issues);
+          _this.updateLastExecutionTime();
+        } else if (xhr.status === 422) {
+          _this.fetchWithoutTime();
+        }
       }
     };
 
-    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(this._settings.projectId));
+    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(this._lastExecutionTime, this._settings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
+  };
 
-    this.updateLastExecutionTime();
+  /**
+   * Fetch without time.
+   */
+  RedmineNotifier.prototype.fetchWithoutTime = function() {
+    var _this = this;
+    var xhr = new XMLHttpRequest();
+    var lastExecutionDate = this._lastExecutionTime.replace(/T.*/, '');
+    var lastExecutionTime = new Date(this._lastExecutionTime).getTime();
+
+    xhr.onreadystatechange = function() {
+      var issues = [];
+      var i;
+      var responseIssues;
+      var responseIssueCount;
+      var updatedTime;
+
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          responseIssues = JSON.parse(xhr.responseText).issues;
+          responseIssueCount = responseIssues.length;
+
+          for (i = 0; i < responseIssueCount; i++) {
+            updatedTime = new Date(responseIssues[i].updated_on).getTime();
+
+            if (updatedTime >= lastExecutionTime) {
+              issues.push(responseIssues[i]);
+            }
+          }
+
+          _this.notify(issues);
+        }
+
+        _this.updateLastExecutionTime();
+      }
+    };
+
+    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(lastExecutionDate, this._settings.projectId));
+    xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
+    xhr.send();
   };
 
   /**
    * Test the connection to the Redmine.
    */
   RedmineNotifier.prototype.testConnection = function() {
+    var _this = this;
     var xhr = new XMLHttpRequest();
     var pageSettings = this.getPageSettings();
 
     xhr.onreadystatechange = function() {
-      var style = 3;
-      var message = 'Connection failed.';
-
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          style = 1;
-          message = 'Connection succeeded.';
+          notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
+        } else if (xhr.status === 422) {
+          _this.testConnectionWithoutTime();
+        } else {
+          notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
         }
-
-        notie.alert(style, message, NOTIE_DISPLAY_SEC);
       }
     };
 
-    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(pageSettings.projectId));
+    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(this._lastExecutionTime, pageSettings.projectId));
+    xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
+    xhr.send();
+  };
+
+  /**
+   * Test the connection without time.
+   */
+  RedmineNotifier.prototype.testConnectionWithoutTime = function() {
+    var xhr = new XMLHttpRequest();
+    var pageSettings = this.getPageSettings();
+    var updatedDate = this._lastExecutionTime.replace(/T.*/, '');
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
+        } else {
+          notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
+        }
+      }
+    };
+
+    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(updatedDate, pageSettings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
     xhr.send();
   };
 
   /**
    * Get the request parameters.
+   * @param {string} updatedOn - Updated on.
    * @param {string} projectId - Project ID (a numeric value, not a project identifier).
    * @return {string} Request parameters.
    */
-  RedmineNotifier.prototype.getRequestParams = function(projectId) {
+  RedmineNotifier.prototype.getRequestParams = function(updatedOn, projectId) {
     var params = [
-      'updated_on=%3E%3D' + this._lastExecutionTime,
+      'updated_on=%3E%3D' + updatedOn,
       'sort=updated_on:desc'
     ];
 
