@@ -238,7 +238,7 @@
   RedmineNotifier.prototype.testConnectionWithoutTime = function() {
     var xhr = new XMLHttpRequest();
     var pageSettings = this.getPageSettings();
-    var updatedDate = this._lastExecutionTime.replace(/T.*/, '');
+    var lastExecutionDate = this._lastExecutionTime.replace(/T.*/, '');
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
@@ -250,20 +250,20 @@
       }
     };
 
-    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(updatedDate, pageSettings.projectId));
+    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(lastExecutionDate, pageSettings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
     xhr.send();
   };
 
   /**
    * Get the request parameters.
-   * @param {string} updatedOn - Updated on.
+   * @param {string} lastExecutionTimeOrDate - Last execution time or date.
    * @param {string} projectId - Project ID (a numeric value, not a project identifier).
    * @return {string} Request parameters.
    */
-  RedmineNotifier.prototype.getRequestParams = function(updatedOn, projectId) {
+  RedmineNotifier.prototype.getRequestParams = function(lastExecutionTimeOrDate, projectId) {
     var params = [
-      'updated_on=%3E%3D' + updatedOn,
+      'updated_on=%3E%3D' + lastExecutionTimeOrDate,
       'sort=updated_on:desc'
     ];
 
