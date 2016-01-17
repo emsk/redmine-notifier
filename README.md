@@ -25,10 +25,6 @@ Installers for OS X and Windows can be found on the [releases](../../releases) p
 The icon appears in the menu bar or task tray when Redmine Notifier is started.
 Select "Preferences" in the context menu to open the settings window.
 
-## Supported Redmine Versions
-
-* Redmine 2.5.0 or higher
-
 ## Development
 
 Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can develop it with web technologies.
