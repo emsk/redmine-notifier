@@ -11,6 +11,8 @@
   var notie = require('notie');
   var notifier = require('node-notifier');
 
+  var FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
+
   /**
    * Initialize the RedmineNotifier object.
    * @constructor
@@ -47,7 +49,7 @@
     });
 
     document.getElementById('test-connection-button').addEventListener('click', function() {
-      _this.testConnection();
+      _this.testConnection(FETCH_MODE.TIME);
     });
   };
 
@@ -139,131 +141,125 @@
     clearInterval(this._fetchTimer);
 
     this._fetchTimer = setInterval(function() {
-      _this.fetch();
+      _this.fetch(FETCH_MODE.TIME);
     }, intervalMsec);
   };
 
   /**
    * Fetch updated issues by using Redmine REST API.
+   * @param {string} mode - Time or date.
    */
-  RedmineNotifier.prototype.fetch = function() {
+  RedmineNotifier.prototype.fetch = function(mode) {
     var _this = this;
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          _this.notify(JSON.parse(xhr.responseText).issues);
-          _this.updateLastExecutionTime();
-        } else if (xhr.status === 422) {
-          _this.fetchWithoutTime();
-        }
+        _this.handleResponseFetch(mode, xhr.status, xhr.responseText);
       }
     };
 
-    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(this._lastExecutionTime, this._settings.projectId));
+    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(mode, this._settings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
   };
 
   /**
-   * Fetch without time.
+   * Handle the response for the fetch.
+   * @param {string} mode - Time or date.
+   * @param {number} status - Response status.
+   * @param {string} responseText - Response text.
    */
-  RedmineNotifier.prototype.fetchWithoutTime = function() {
-    var _this = this;
-    var xhr = new XMLHttpRequest();
-    var lastExecutionDate = this._lastExecutionTime.replace(/T.*/, '');
-    var lastExecutionTime = new Date(this._lastExecutionTime).getTime();
-
-    xhr.onreadystatechange = function() {
-      var issues = [];
-      var i;
-      var responseIssues;
-      var responseIssueCount;
-      var updatedTime;
-
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          responseIssues = JSON.parse(xhr.responseText).issues;
-          responseIssueCount = responseIssues.length;
-
-          for (i = 0; i < responseIssueCount; i++) {
-            updatedTime = new Date(responseIssues[i].updated_on).getTime();
-
-            if (updatedTime >= lastExecutionTime) {
-              issues.push(responseIssues[i]);
-            }
-          }
-
-          _this.notify(issues);
-        }
-
-        _this.updateLastExecutionTime();
+  RedmineNotifier.prototype.handleResponseFetch = function(mode, status, responseText) {
+    if (mode === FETCH_MODE.TIME) {
+      if (status === 200) {
+        this.notify(JSON.parse(responseText).issues);
+        this.updateLastExecutionTime();
+      } else if (status === 422) {
+        // Retry with date mode when Redmine API doesn't accept time format
+        this.fetch(FETCH_MODE.DATE);
       }
-    };
+    } else {
+      if (status === 200) {
+        this.notify(this.pickIssues(JSON.parse(responseText).issues));
+      }
 
-    xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(lastExecutionDate, this._settings.projectId));
-    xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
-    xhr.send();
+      this.updateLastExecutionTime();
+    }
+  };
+
+  /**
+   * Get issues which were updated after last execution time.
+   * @param {string} responseIssues - Response issues.
+   * @return {Object[]} Processed issues.
+   */
+  RedmineNotifier.prototype.pickIssues = function(responseIssues) {
+    var responseIssueCount = responseIssues.length;
+    var lastExecutionTime = new Date(this._lastExecutionTime).getTime();
+    var issues = [];
+    var i;
+    var updatedTime;
+
+    for (i = 0; i < responseIssueCount; i++) {
+      updatedTime = new Date(responseIssues[i].updated_on).getTime();
+
+      if (updatedTime >= lastExecutionTime) {
+        issues.push(responseIssues[i]);
+      }
+    }
+
+    return issues;
   };
 
   /**
    * Test the connection to the Redmine.
+   * @param {string} mode - Time or date.
    */
-  RedmineNotifier.prototype.testConnection = function() {
+  RedmineNotifier.prototype.testConnection = function(mode) {
     var _this = this;
     var xhr = new XMLHttpRequest();
     var pageSettings = this.getPageSettings();
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
-        } else if (xhr.status === 422) {
-          _this.testConnectionWithoutTime();
-        } else {
-          notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
-        }
+        _this.handleResponseTestConnection(mode, xhr.status);
       }
     };
 
-    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(this._lastExecutionTime, pageSettings.projectId));
+    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(mode, pageSettings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
     xhr.send();
   };
 
   /**
-   * Test the connection without time.
+   * Handle the response for the test connection.
+   * @param {string} mode - Time or date.
+   * @param {number} status - Response status.
    */
-  RedmineNotifier.prototype.testConnectionWithoutTime = function() {
-    var xhr = new XMLHttpRequest();
-    var pageSettings = this.getPageSettings();
-    var lastExecutionDate = this._lastExecutionTime.replace(/T.*/, '');
+  RedmineNotifier.prototype.handleResponseTestConnection = function(mode, status) {
+    if (status === 200) {
+      notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
+      return;
+    }
 
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
-        } else {
-          notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
-        }
-      }
-    };
+    // Retry with date mode when Redmine API doesn't accept time format
+    if (mode === FETCH_MODE.TIME && status === 422) {
+      this.testConnection(FETCH_MODE.DATE);
+      return;
+    }
 
-    xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(lastExecutionDate, pageSettings.projectId));
-    xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
-    xhr.send();
+    notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
   };
 
   /**
    * Get the request parameters.
-   * @param {string} lastExecutionTimeOrDate - Last execution time or date.
+   * @param {string} mode - Time or date.
    * @param {string} projectId - Project ID (a numeric value, not a project identifier).
    * @return {string} Request parameters.
    */
-  RedmineNotifier.prototype.getRequestParams = function(lastExecutionTimeOrDate, projectId) {
+  RedmineNotifier.prototype.getRequestParams = function(mode, projectId) {
     var params = [
-      'updated_on=%3E%3D' + lastExecutionTimeOrDate,
+      'updated_on=%3E%3D' + this.getLastExecutionTime(mode),
       'sort=updated_on:desc'
     ];
 
@@ -272,6 +268,18 @@
     }
 
     return '?' + params.join('&');
+  };
+
+  /**
+   * Get last execution time by mode.
+   * @param {string} mode - Time or date.
+   */
+  RedmineNotifier.prototype.getLastExecutionTime = function(mode) {
+    if (mode === FETCH_MODE.TIME) {
+      return this._lastExecutionTime;
+    } else {
+      return this._lastExecutionTime.replace(/T.*/, ''); // Date
+    }
   };
 
   /**
