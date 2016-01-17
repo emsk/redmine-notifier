@@ -9,7 +9,8 @@
     "build:win": "./bin/build-win.sh",
     "pack": "npm run pack:osx && npm run pack:win",
     "pack:osx": "./bin/pack-osx.sh",
-    "pack:win": "./bin/pack-win.sh"
+    "pack:win": "./bin/pack-win.sh",
+    "release": "npm run prepare && npm run pack"
   },
   "dependencies": {
     "node-notifier": "^4.4.0",
