@@ -15,7 +15,7 @@ electron-packager ../app 'Redmine Notifier' \
   --version-string.LegalCopyright='Copyright (c) 2015 emsk' \
   --version-string.FileDescription='Redmine Notifier' \
   --version-string.OriginalFilename='' \
-  --version-string.FileVersion='0.3.0' \
-  --version-string.ProductVersion='0.3.0' \
+  --version-string.FileVersion='0.4.0' \
+  --version-string.ProductVersion='0.4.0' \
   --version-string.ProductName='Redmine Notifier' \
   --version-string.InternalName=''

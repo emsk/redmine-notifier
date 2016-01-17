@@ -1,5 +1,16 @@
 # Change Log 
 
+## 0.4.0 (2016-01-17)
+
+### Production
+
+* Add fallback when Redmine API doesn't accept time format
+
+### Development
+
+* Avoid outputting a console message like "Couldn't set selectedTextBackgroundColor from default ()" when selecting text in the settings window
+* Upgrade electron-prebuilt dependency to ^0.36.4
+
 ## 0.3.0 (2016-01-11)
 
 ### Production
