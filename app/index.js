@@ -319,7 +319,7 @@
     });
   };
 
-  window.onload = function() {
+  window.addEventListener('load', function() {
     var redmineNotifier = new RedmineNotifier();
     redmineNotifier.initEventListener();
     redmineNotifier.displayDefaultSettings();
@@ -330,6 +330,6 @@
     if (redmineNotifier.validateSettings()) {
       redmineNotifier.initFetch();
     }
-  };
+  });
 }());
 
