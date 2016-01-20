@@ -25,6 +25,7 @@
 
   /**
    * Initialize the event listeners.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.initEventListener = function() {
     var _this = this;
@@ -33,8 +34,8 @@
       _this.readScreenSettings();
 
       if (_this.validateSettings()) {
-        _this.initFetch();
-        _this.updateSettings();
+        _this.initFetch()
+          .updateSettings();
       } else {
         _this.readStoredSettings();
       }
@@ -43,31 +44,37 @@
     });
 
     document.getElementById('close-button').addEventListener('click', function() {
-      _this.readStoredSettings();
-      _this.displaySettings();
+      _this.readStoredSettings()
+        .displaySettings();
       remote.getCurrentWindow().hide();
     });
 
     document.getElementById('test-connection-button').addEventListener('click', function() {
       _this.testConnection(FETCH_MODE.TIME);
     });
+
+    return this;
   };
 
   /**
    * Display the default settings on the screen.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.displayDefaultSettings = function() {
     document.getElementById('default-fetch-interval-sec').innerHTML = DEFAULT_FETCH_INTERVAL_SEC;
+    return this;
   };
 
   /**
    * Display the settings on the screen.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.displaySettings = function() {
     document.getElementById('url').value = this._settings.url;
     document.getElementById('api-key').value = this._settings.apiKey;
     document.getElementById('project-id').value = this._settings.projectId;
     document.getElementById('fetch-interval-sec').value = this._settings.fetchIntervalSec;
+    return this;
   };
 
   /**
@@ -84,13 +91,16 @@
 
   /**
    * Read the settings from the screen.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.readScreenSettings = function() {
     this._settings = this.getPageSettings();
+    return this;
   };
 
   /**
    * Read the settings from the localStorage.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.readStoredSettings = function() {
     this._settings = {
@@ -99,24 +109,30 @@
       projectId: localStorage.getItem('projectId'),
       fetchIntervalSec: localStorage.getItem('fetchIntervalSec')
     };
+
+    return this;
   };
 
   /**
    * Update the stored last execution time.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.updateLastExecutionTime = function() {
     this._lastExecutionTime = (new Date()).toISOString().replace(/\.\d+Z$/, 'Z');
     localStorage.setItem('lastExecutionTime', this._lastExecutionTime);
+    return this;
   };
 
   /**
    * Update the stored settings.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.updateSettings = function() {
     localStorage.setItem('url', this._settings.url);
     localStorage.setItem('apiKey', this._settings.apiKey);
     localStorage.setItem('projectId', this._settings.projectId);
     localStorage.setItem('fetchIntervalSec', this._settings.fetchIntervalSec);
+    return this;
   };
 
   /**
@@ -133,6 +149,7 @@
 
   /**
    * Initialize the fetch function.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.initFetch = function() {
     var _this = this;
@@ -143,11 +160,14 @@
     this._fetchTimer = setInterval(function() {
       _this.fetch(FETCH_MODE.TIME);
     }, intervalMsec);
+
+    return this;
   };
 
   /**
    * Fetch updated issues by using Redmine REST API.
    * @param {string} mode - Time or date.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.fetch = function(mode) {
     var _this = this;
@@ -162,6 +182,8 @@
     xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(mode, this._settings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
+
+    return this;
   };
 
   /**
@@ -169,12 +191,13 @@
    * @param {string} mode - Time or date.
    * @param {number} status - Response status.
    * @param {string} responseText - Response text.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.handleResponseFetch = function(mode, status, responseText) {
     if (mode === FETCH_MODE.TIME) {
       if (status === 200) {
-        this.notify(JSON.parse(responseText).issues);
-        this.updateLastExecutionTime();
+        this.notify(JSON.parse(responseText).issues)
+          .updateLastExecutionTime();
       } else if (status === 422) {
         // Retry with date mode when Redmine API doesn't accept time format
         this.fetch(FETCH_MODE.DATE);
@@ -186,6 +209,8 @@
 
       this.updateLastExecutionTime();
     }
+
+    return this;
   };
 
   /**
@@ -214,6 +239,7 @@
   /**
    * Test the connection to the Redmine.
    * @param {string} mode - Time or date.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.testConnection = function(mode) {
     var _this = this;
@@ -229,26 +255,31 @@
     xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(mode, pageSettings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
     xhr.send();
+
+    return this;
   };
 
   /**
    * Handle the response for the test connection.
    * @param {string} mode - Time or date.
    * @param {number} status - Response status.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.handleResponseTestConnection = function(mode, status) {
     if (status === 200) {
       notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
-      return;
+      return this;
     }
 
     // Retry with date mode when Redmine API doesn't accept time format
     if (mode === FETCH_MODE.TIME && status === 422) {
       this.testConnection(FETCH_MODE.DATE);
-      return;
+      return this;
     }
 
     notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
+
+    return this;
   };
 
   /**
@@ -285,12 +316,13 @@
   /**
    * Send the desktop notification.
    * @param {Object} issues - All of updated issues.
+   * @return {Object} Current object.
    */
   RedmineNotifier.prototype.notify = function(issues) {
     var _this = this;
     var issueCount = issues.length;
 
-    if (issueCount === 0) return;
+    if (issueCount === 0) return this;
 
     var appDir = __dirname + '.unpacked'; // Production
     try {
@@ -317,15 +349,17 @@
     notifier.once('timeout', function(notifierObject, options) {
       notifier.removeAllListeners();
     });
+
+    return this;
   };
 
   window.addEventListener('load', function() {
     var redmineNotifier = new RedmineNotifier();
-    redmineNotifier.initEventListener();
-    redmineNotifier.displayDefaultSettings();
-    redmineNotifier.updateLastExecutionTime();
-    redmineNotifier.readStoredSettings();
-    redmineNotifier.displaySettings();
+    redmineNotifier.initEventListener()
+      .displayDefaultSettings()
+      .updateLastExecutionTime()
+      .readStoredSettings()
+      .displaySettings();
 
     if (redmineNotifier.validateSettings()) {
       redmineNotifier.initFetch();
