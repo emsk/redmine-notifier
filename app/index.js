@@ -79,6 +79,7 @@
 
   /**
    * Get the settings from the screen.
+   * @return {Object} Settings.
    */
   RedmineNotifier.prototype.getPageSettings = function() {
     return {
@@ -137,6 +138,7 @@
 
   /**
    * Validate the settings.
+   * @return {boolean} true if valid.
    */
   RedmineNotifier.prototype.validateSettings = function() {
     if (this._settings.url && this._settings.apiKey) {
@@ -304,6 +306,7 @@
   /**
    * Get last execution time by mode.
    * @param {string} mode - Time or date.
+   * @return {string} Last execution time.
    */
   RedmineNotifier.prototype.getLastExecutionTime = function(mode) {
     if (mode === FETCH_MODE.TIME) {
