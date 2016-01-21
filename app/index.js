@@ -344,12 +344,12 @@
 
     notifier.removeAllListeners();
 
-    notifier.once('click', function(notifierObject, options) {
+    notifier.once('click', function() {
       shell.openExternal(_this._settings.url + '/issues/' + issues[0].id);
       notifier.removeAllListeners();
     });
 
-    notifier.once('timeout', function(notifierObject, options) {
+    notifier.once('timeout', function() {
       notifier.removeAllListeners();
     });
 
