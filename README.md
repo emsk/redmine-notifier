@@ -41,6 +41,7 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 * [electron-builder](https://github.com/loopline-systems/electron-builder)
 * [electron-packager](https://github.com/maxogden/electron-packager)
 * [electron-prebuilt](https://github.com/mafintosh/electron-prebuilt)
+* [eslint](https://github.com/eslint/eslint)
 
 See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
@@ -67,6 +68,12 @@ npm run build
 
 ```sh
 npm run pack
+```
+
+### Linting JavaScript files
+
+```sh
+npm run lint
 ```
 
 See `scripts` in [`package.json`](package.json) with regard to other commands.
