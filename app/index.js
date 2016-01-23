@@ -21,6 +21,7 @@
     this._lastExecutionTime = null;
     this._settings = null;
     this._fetchTimer = null;
+    this._fetchMode = null;
   }
 
   /**
@@ -160,7 +161,7 @@
     clearInterval(this._fetchTimer);
 
     this._fetchTimer = setInterval(function() {
-      _this.fetch(FETCH_MODE.TIME);
+      _this.fetch(_this._fetchMode || FETCH_MODE.TIME);
     }, intervalMsec);
 
     return this;
@@ -201,7 +202,8 @@
         this.notify(JSON.parse(responseText).issues)
           .updateLastExecutionTime();
       } else if (status === 422) {
-        // Retry with date mode when Redmine API doesn't accept time format
+        // Retry with date mode if Redmine API doesn't accept time format
+        this._fetchMode = FETCH_MODE.DATE;
         this.fetch(FETCH_MODE.DATE);
       }
     } else {
@@ -273,7 +275,7 @@
       return this;
     }
 
-    // Retry with date mode when Redmine API doesn't accept time format
+    // Retry with date mode if Redmine API doesn't accept time format
     if (mode === FETCH_MODE.TIME && status === 422) {
       this.testConnection(FETCH_MODE.DATE);
       return this;
