@@ -1,5 +1,5 @@
 #!/bin/bash
-cd `dirname $0`
+cd $(dirname $0)
 npm install --prefix ../app
 rm -rf ../dist/win
 $(npm bin)/electron-packager ../app 'Redmine Notifier' \

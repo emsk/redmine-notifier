@@ -1,5 +1,5 @@
 #!/bin/bash
-cd `dirname $0`
+cd $(dirname $0)
 npm run build:osx
 $(npm bin)/electron-builder '../dist/osx/Redmine Notifier-darwin-x64/Redmine Notifier.app' \
   --platform=osx \

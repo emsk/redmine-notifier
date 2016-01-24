@@ -1,5 +1,5 @@
 #!/bin/bash
-cd `dirname $0`
+cd $(dirname $0)
 npm run build:win
 $(npm bin)/electron-builder '../dist/win/Redmine Notifier-win32-x64' \
   --platform=win \
