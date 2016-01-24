@@ -2,7 +2,7 @@
 cd `dirname $0`
 npm install --prefix ../app
 rm -rf ../dist/win
-electron-packager ../app 'Redmine Notifier' \
+$(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --platform=win32 \
   --arch=x64 \
   --version=0.36.4 \

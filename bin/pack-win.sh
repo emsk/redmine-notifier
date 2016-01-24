@@ -1,7 +1,7 @@
 #!/bin/bash
 cd `dirname $0`
 npm run build:win
-electron-builder '../dist/win/Redmine Notifier-win32-x64' \
+$(npm bin)/electron-builder '../dist/win/Redmine Notifier-win32-x64' \
   --platform=win \
   --out=../dist/win \
   --config=./config.json
