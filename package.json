@@ -5,6 +5,7 @@
     "start": "electron ./app/main.js",
     "prepare": "./bin/prepare.sh",
     "lint": "eslint ./app/main.js ./app/index.js || exit 0",
+    "csslint": "csslint ./app/stylesheets/index.css",
     "build": "npm run build:osx && npm run build:win",
     "build:osx": "./bin/build-osx.sh",
     "build:win": "./bin/build-win.sh",
@@ -18,6 +19,7 @@
     "notie": "^2.1.0"
   },
   "devDependencies": {
+    "csslint": "^0.10.0",
     "electron-builder": "^2.6.0",
     "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.36.4",
