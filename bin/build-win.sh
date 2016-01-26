@@ -12,7 +12,7 @@ $(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --asar-unpack='**/app/{node_modules/node-notifier/vendor,images}/**' \
   --ignore='\.DS_Store|npm-debug\.log|^/etc' \
   --version-string.CompanyName='emsk' \
-  --version-string.LegalCopyright='Copyright (c) 2015 emsk' \
+  --version-string.LegalCopyright='Copyright (c) 2015-2016 emsk' \
   --version-string.FileDescription='Redmine Notifier' \
   --version-string.OriginalFilename='' \
   --version-string.FileVersion='0.4.0' \
