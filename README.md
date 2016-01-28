@@ -7,9 +7,9 @@
 Redmine Notifier is a simple updated issues checker that runs in the background.
 It sends a desktop notification if there are any updates in issues.
 
-![Notification Mac 10.10](assets/osx/notification_osx_10.10.png?raw=true)
-![Notification Win 8.1](assets/win/notification_win_8.1.png?raw=true)
-![Notification Win 7](assets/win/notification_win_7.png?raw=true)
+![Notification Mac 10.10](examples/notification_osx_10.10.png?raw=true)
+![Notification Win 8.1](examples/notification_win_8.1.png?raw=true)
+![Notification Win 7](examples/notification_win_7.png?raw=true)
 
 The number of issues that were updated after previous fetch is shown in parentheses.
 Also, the subject is shown only about the latest issue.
@@ -20,7 +20,7 @@ Installers for OS X and Windows can be found on the [releases](../../releases) p
 
 ## Settings
 
-![Settings](assets/osx/redmine_notifier_settings.png?raw=true)
+![Settings](examples/redmine_notifier_settings.png?raw=true)
 
 The icon appears in the menu bar or task tray when Redmine Notifier is started.
 Select "Preferences" in the context menu to open the settings window.
