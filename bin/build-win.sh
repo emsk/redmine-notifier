@@ -5,7 +5,7 @@ rm -rf ../dist/win
 $(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --platform=win32 \
   --arch=x64 \
-  --version=0.36.4 \
+  --version=0.36.8 \
   --out=../dist/win \
   --icon=../assets/win/redmine_notifier.ico \
   --asar \

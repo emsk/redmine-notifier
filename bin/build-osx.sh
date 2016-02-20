@@ -5,7 +5,7 @@ rm -rf ../dist/osx
 $(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --platform=darwin \
   --arch=x64 \
-  --version=0.36.4 \
+  --version=0.36.8 \
   --out=../dist/osx \
   --icon=../assets/osx/redmine_notifier.icns \
   --asar \
