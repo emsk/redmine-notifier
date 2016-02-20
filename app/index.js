@@ -1,6 +1,6 @@
-(function() {
-  'use strict';
+'use strict';
 
+(function() {
   const DEFAULT_FETCH_INTERVAL_SEC = 600;
   const NOTIE_DISPLAY_SEC = 1.5;
   const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
