@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "csslint": "^0.10.0",
-    "electron-builder": "^2.7.2",
+    "electron-builder": "^2.8.5",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.8",
-    "eslint": "^2.2.0"
+    "electron-prebuilt": "^0.36.10",
+    "eslint": "^2.3.0"
   }
 }
