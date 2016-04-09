@@ -48,6 +48,7 @@
       _this.readStoredSettings()
         .displaySettings();
       remote.getCurrentWindow().hide();
+      remote.getCurrentWindow().reload();
     });
 
     document.getElementById('test-connection-button').addEventListener('click', function() {
