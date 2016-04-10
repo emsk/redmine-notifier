@@ -34,7 +34,7 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 ##### Production
 
 * [node-notifier](https://github.com/mikaelbr/node-notifier)
-* [notie](https://github.com/jaredreich/notie.js)
+* [notie](https://github.com/jaredreich/notie)
 
 ##### Development
 
