@@ -4,9 +4,15 @@
   const DEFAULT_FETCH_INTERVAL_SEC = 600;
   const NOTIE_DISPLAY_SEC = 1.5;
   const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
+  const BLACK_ICON_FILENAME_24 = 'redmine_icon_black_24.png';
+  const BLACK_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_black_24_notification.png';
+  const COLOR_ICON_FILENAME_24 = 'redmine_icon_color_24.png';
+  const COLOR_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_color_24_notification.png';
 
   var remote = window.require('remote');
   var shell = remote.require('shell');
+  var Menu = remote.require('menu');
+  var Tray = remote.require('tray');
   var fs = require('fs');
   var notie = require('notie');
   var notifier = require('node-notifier');
@@ -18,11 +24,62 @@
    * @constructor
    */
   function RedmineNotifier() {
+    this._tray = null;
     this._lastExecutionTime = null;
     this._settings = null;
     this._fetchTimer = null;
     this._fetchMode = null;
+
+    if (process.platform === 'darwin') {
+      this._iconFilePath             = __dirname + '/images/' + BLACK_ICON_FILENAME_24;
+      this._notificationIconFilePath = __dirname + '/images/' + BLACK_ICON_FILENAME_24_NOTIFICATION;
+    } else {
+      this._iconFilePath             = __dirname + '/images/' + COLOR_ICON_FILENAME_24;
+      this._notificationIconFilePath = __dirname + '/images/' + COLOR_ICON_FILENAME_24_NOTIFICATION;
+    }
   }
+
+  /**
+   * Initialize the application menu and context menu.
+   */
+  RedmineNotifier.prototype.initMenu = function() {
+    var _this = this;
+
+    var appMenu = Menu.buildFromTemplate([
+      {
+        label: 'Edit',
+        submenu: [
+          { label: 'Undo',       accelerator: 'CmdOrCtrl+Z',       role: 'undo' },
+          { label: 'Redo',       accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
+          { label: 'Cut',        accelerator: 'CmdOrCtrl+X',       role: 'cut' },
+          { label: 'Copy',       accelerator: 'CmdOrCtrl+C',       role: 'copy' },
+          { label: 'Paste',      accelerator: 'CmdOrCtrl+V',       role: 'paste' },
+          { label: 'Select All', accelerator: 'CmdOrCtrl+A',       role: 'selectall' }
+        ]
+      }
+    ]);
+
+    var contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Preferences',
+        click: function() {
+          remote.getCurrentWindow().show();
+        }
+      }, {
+        label: 'Quit',
+        click: function() {
+          remote.app.quit();
+        }
+      }
+    ]);
+
+    Menu.setApplicationMenu(appMenu);
+
+    _this._tray = new Tray(_this._iconFilePath);
+    _this._tray.setContextMenu(contextMenu);
+
+    return this;
+  };
 
   /**
    * Initialize the event listeners.
@@ -185,6 +242,8 @@
     xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(mode, this._settings.projectId));
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
+
+    _this._tray.setImage(_this._iconFilePath);
 
     return this;
   };
@@ -355,12 +414,15 @@
       notifier.removeAllListeners();
     });
 
+    _this._tray.setImage(_this._notificationIconFilePath);
+
     return this;
   };
 
   window.addEventListener('load', function() {
     var redmineNotifier = new RedmineNotifier();
-    redmineNotifier.initEventListener()
+    redmineNotifier.initMenu()
+      .initEventListener()
       .displayDefaultSettings()
       .updateLastExecutionTime()
       .readStoredSettings()
