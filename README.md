@@ -39,9 +39,9 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 ##### Development
 
 * [csslint](https://github.com/CSSLint/csslint)
-* [electron-builder](https://github.com/loopline-systems/electron-builder)
-* [electron-packager](https://github.com/maxogden/electron-packager)
-* [electron-prebuilt](https://github.com/mafintosh/electron-prebuilt)
+* [electron-builder](https://github.com/electron-userland/electron-builder)
+* [electron-packager](https://github.com/electron-userland/electron-packager)
+* [electron-prebuilt](https://github.com/electron-userland/electron-prebuilt)
 * [eslint](https://github.com/eslint/eslint)
 
 See `dependencies` and `devDependencies` in [`package.json`](package.json).
