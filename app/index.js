@@ -395,6 +395,8 @@
       appDir = __dirname; // Development
     }
 
+    _this._tray.setImage(_this._notificationIconFilePath);
+
     // Display the latest issue's subject only
     notifier.notify({
       title: '(' + issueCount + ') Redmine Notifier',
@@ -406,6 +408,8 @@
     notifier.removeAllListeners();
 
     notifier.once('click', function() {
+      _this._tray.setImage(_this._iconFilePath);
+
       shell.openExternal(_this._settings.url + '/issues/' + issues[0].id);
       notifier.removeAllListeners();
     });
@@ -413,8 +417,6 @@
     notifier.once('timeout', function() {
       notifier.removeAllListeners();
     });
-
-    _this._tray.setImage(_this._notificationIconFilePath);
 
     return this;
   };
