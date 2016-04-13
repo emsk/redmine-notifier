@@ -10,4 +10,7 @@ $(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --icon=../assets/osx/redmine_notifier.icns \
   --asar \
   --asar-unpack='**/app/{node_modules/node-notifier/vendor,images}/**' \
-  --ignore='\.DS_Store|npm-debug\.log|^/etc'
+  --ignore='\.DS_Store|npm-debug\.log|^/etc' \
+  --app-copyright='Copyright (c) 2015-2016 emsk' \
+  --app-version='0.4.0' \
+  --build-version='0.4.0'

@@ -11,11 +11,11 @@ $(npm bin)/electron-packager ../app 'Redmine Notifier' \
   --asar \
   --asar-unpack='**/app/{node_modules/node-notifier/vendor,images}/**' \
   --ignore='\.DS_Store|npm-debug\.log|^/etc' \
+  --app-copyright='Copyright (c) 2015-2016 emsk' \
+  --app-version='0.4.0' \
+  --build-version='0.4.0' \
   --version-string.CompanyName='emsk' \
-  --version-string.LegalCopyright='Copyright (c) 2015-2016 emsk' \
   --version-string.FileDescription='Redmine Notifier' \
   --version-string.OriginalFilename='' \
-  --version-string.FileVersion='0.4.0' \
-  --version-string.ProductVersion='0.4.0' \
   --version-string.ProductName='Redmine Notifier' \
   --version-string.InternalName=''
