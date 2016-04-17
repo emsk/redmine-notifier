@@ -21,9 +21,23 @@
   },
   "devDependencies": {
     "csslint": "^0.10.0",
-    "electron-builder": "^2.10.1",
+    "electron-builder": "^3.6.1",
     "electron-packager": "^6.0.2",
     "electron-prebuilt": "^0.37.5",
     "eslint": "^2.7.0"
+  },
+  "build": {
+    "app-bundle-id": "redmine-notifier",
+    "app-category-type": "public.app-category.productivity",
+    "asar-unpack": "**/app/{node_modules/node-notifier/vendor,images}/**",
+    "ignore": "\\.DS_Store|npm-debug\\.log|^/etc",
+    "app-copyright": "Copyright (c) 2015-2016 emsk",
+    "osx": {
+      "icon-size": 120,
+      "contents": [
+        { "x": 370, "y": 300, "type": "link", "path": "/Applications" },
+        { "x": 130, "y": 300, "type": "file" }
+      ]
+    }
   }
 }

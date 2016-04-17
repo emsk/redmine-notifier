@@ -1,8 +1,4 @@
 #!/bin/bash
-cd $(dirname $0)
-npm run build:win
-$(npm bin)/electron-builder '../dist/win/Redmine Notifier-win32-x64' \
-  --platform=win \
-  --out=../dist/win \
-  --config=./config.json
-mv '../dist/win/Redmine Notifier Setup.exe' ../dist/win/RedmineNotifierSetup.exe
+cd $(dirname $0)/..
+$(npm bin)/build --platform=win32 --arch=x64 --dist
+mv './dist/win-x64/Redmine NotifierSetup-0.4.0.exe' ./dist/win-x64/RedmineNotifierSetup.exe
