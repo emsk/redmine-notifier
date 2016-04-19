@@ -2,7 +2,7 @@
   "name": "redmine-notifier",
   "productName": "Redmine Notifier",
   "version": "0.4.0",
-  "description": "An updated issues checker for Redmine.",
+  "description": "Redmine Notifier",
   "main": "main.js",
   "repository": {
     "type": "git",
