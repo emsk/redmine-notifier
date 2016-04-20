@@ -40,7 +40,6 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 
 * [csslint](https://github.com/CSSLint/csslint)
 * [electron-builder](https://github.com/electron-userland/electron-builder)
-* [electron-packager](https://github.com/electron-userland/electron-packager)
 * [electron-prebuilt](https://github.com/electron-userland/electron-prebuilt)
 * [eslint](https://github.com/eslint/eslint)
 
