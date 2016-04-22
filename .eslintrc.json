@@ -1,9 +1,9 @@
 {
   "rules": {
-    "strict": 2,
-    "indent": [2, 2],
-    "quotes": [2, "single"],
-    "semi": [2, "always"]
+    "strict": "error",
+    "indent": ["error", 2],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"]
   },
   "env": {
     "browser": true,
