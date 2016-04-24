@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "node-notifier": "^4.5.0",
-    "notie": "^3.0.0"
+    "notie": "^3.2.0"
   },
   "devDependencies": {
     "csslint": "^0.10.0",
