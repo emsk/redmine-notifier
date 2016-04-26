@@ -23,7 +23,7 @@
     "csslint": "^0.10.0",
     "electron-builder": "^3.9.0",
     "electron-prebuilt": "0.37.6",
-    "eslint": "^2.7.0"
+    "eslint": "^2.8.0"
   },
   "build": {
     "app-bundle-id": "redmine-notifier",
