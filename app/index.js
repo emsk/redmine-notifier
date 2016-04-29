@@ -29,6 +29,8 @@
     this._settings = null;
     this._fetchTimer = null;
     this._fetchMode = null;
+    this._contextMenu = null;
+    this._mostRecentIssueId = null;
 
     if (process.platform === 'darwin') {
       this._iconFilePath             = __dirname + '/images/' + BLACK_ICON_FILENAME_24;
@@ -59,8 +61,15 @@
       }
     ]);
 
-    var contextMenu = Menu.buildFromTemplate([
+    this._contextMenu = Menu.buildFromTemplate([
       {
+        label: 'Open Most Recent Issue in Browser',
+        click: function() {
+          shell.openExternal(_this._settings.url + '/issues/' + _this._mostRecentIssueId);
+          _this.setNormalIcon();
+        },
+        enabled: false
+      }, {
         label: 'Preferences',
         click: function() {
           remote.getCurrentWindow().show();
@@ -76,7 +85,7 @@
     Menu.setApplicationMenu(appMenu);
 
     _this._tray = new Tray(_this._iconFilePath);
-    _this._tray.setContextMenu(contextMenu);
+    this._tray.setContextMenu(this._contextMenu);
 
     return this;
   };
@@ -243,7 +252,7 @@
     xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
     xhr.send();
 
-    _this._tray.setImage(_this._iconFilePath);
+    this.setNormalIcon();
 
     return this;
   };
@@ -395,7 +404,7 @@
       appDir = __dirname; // Development
     }
 
-    _this._tray.setImage(_this._notificationIconFilePath);
+    this.setNotificationIcon(issues[0].id);
 
     // Display the latest issue's subject only
     notifier.notify({
@@ -408,15 +417,39 @@
     notifier.removeAllListeners();
 
     notifier.once('click', function() {
-      _this._tray.setImage(_this._iconFilePath);
-
-      shell.openExternal(_this._settings.url + '/issues/' + issues[0].id);
+      shell.openExternal(_this._settings.url + '/issues/' + _this._mostRecentIssueId);
+      _this.setNormalIcon();
       notifier.removeAllListeners();
     });
 
     notifier.once('timeout', function() {
       notifier.removeAllListeners();
     });
+
+    return this;
+  };
+
+  /**
+   * Set normal icon and disable "Open Most Recent Issue in Browser" in context menu.
+   * @return {Object} Current object.
+   */
+  RedmineNotifier.prototype.setNormalIcon = function() {
+    this._tray.setImage(this._iconFilePath);
+    this._contextMenu.items[0].enabled = false;
+    this._mostRecentIssueId = null;
+
+    return this;
+  };
+
+  /**
+   * Set notification icon and enable "Open Most Recent Issue in Browser" in context menu.
+   * @param {number} issueId - Most recent issue ID.
+   * @return {Object} Current object.
+   */
+  RedmineNotifier.prototype.setNotificationIcon = function(issueId) {
+    this._tray.setImage(this._notificationIconFilePath);
+    this._contextMenu.items[0].enabled = true;
+    this._mostRecentIssueId = issueId;
 
     return this;
   };
