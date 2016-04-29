@@ -84,7 +84,7 @@
 
     Menu.setApplicationMenu(appMenu);
 
-    _this._tray = new Tray(_this._iconFilePath);
+    this._tray = new Tray(this._iconFilePath);
     this._tray.setContextMenu(this._contextMenu);
 
     return this;
