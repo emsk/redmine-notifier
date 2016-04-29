@@ -69,12 +69,14 @@
           _this.setNormalIcon();
         },
         enabled: false
-      }, {
+      },
+      {
         label: 'Preferences',
         click: function() {
           remote.getCurrentWindow().show();
         }
-      }, {
+      },
+      {
         label: 'Quit',
         click: function() {
           remote.app.quit();
@@ -437,7 +439,6 @@
     this._tray.setImage(this._iconFilePath);
     this._contextMenu.items[0].enabled = false;
     this._mostRecentIssueId = null;
-
     return this;
   };
 
@@ -450,7 +451,6 @@
     this._tray.setImage(this._notificationIconFilePath);
     this._contextMenu.items[0].enabled = true;
     this._mostRecentIssueId = issueId;
-
     return this;
   };
 
