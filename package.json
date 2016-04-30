@@ -22,7 +22,7 @@
   "devDependencies": {
     "csslint": "^0.10.0",
     "electron-builder": "^3.12.0",
-    "electron-prebuilt": "0.37.7",
+    "electron-prebuilt": "0.37.8",
     "eslint": "^2.8.0"
   },
   "build": {
