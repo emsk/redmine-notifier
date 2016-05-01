@@ -7,12 +7,27 @@
 Redmine Notifier is a simple updated issues checker that runs in the background.
 It sends a desktop notification if there are any updates in issues.
 
+## Main Notifications
+
+The number of issues that were updated after previous fetch is shown in parentheses.
+Also, the subject is shown only about the latest issue.
+
 ![Notification Mac 10.10](examples/notification_osx_10.10.png?raw=true)
 ![Notification Win 8.1](examples/notification_win_8.1.png?raw=true)
 ![Notification Win 7](examples/notification_win_7.png?raw=true)
 
-The number of issues that were updated after previous fetch is shown in parentheses.
-Also, the subject is shown only about the latest issue.
+## Sub Notifications
+
+When Redmine Notifier is started, An icon appears in the menu bar or task tray.
+If there is a notification in the most recent fetch, the icon is replaced by the notification icon.
+
+##### Menu Icon (OS X)
+
+Normal: ![Icon Mac Normal](examples/icon_osx_normal.png?raw=true) Notification: ![Icon Mac Notification](examples/icon_osx_notification.png?raw=true)
+
+##### Tray Icon (Windows)
+
+Normal: ![Icon Win Normal](examples/icon_win_normal.png?raw=true) Nortification: ![Icon Win Notification](examples/icon_win_notification.png?raw=true)
 
 ## Downloads
 
@@ -20,10 +35,9 @@ Installers for OS X and Windows can be found on the [releases](../../releases) p
 
 ## Settings
 
-![Settings](examples/redmine_notifier_settings.png?raw=true)
+Open the context menu and select "Preferences".
 
-The icon appears in the menu bar or task tray when Redmine Notifier is started.
-Select "Preferences" in the context menu to open the settings window.
+![Settings](examples/redmine_notifier_settings.png?raw=true)
 
 ## Development
 
