@@ -31,7 +31,7 @@ Normal: ![Icon Mac Normal](examples/icon_osx_normal.png?raw=true) Notification: 
 
 ##### Tray Icon (Windows)
 
-Normal: ![Icon Win Normal](examples/icon_win_normal.png?raw=true) Nortification: ![Icon Win Notification](examples/icon_win_notification.png?raw=true)
+Normal: ![Icon Win Normal](examples/icon_win_normal.png?raw=true) Notification: ![Icon Win Notification](examples/icon_win_notification.png?raw=true)
 
 ## Settings
 
