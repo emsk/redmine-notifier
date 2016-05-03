@@ -1,5 +1,29 @@
 # Change Log 
 
+## 0.5.0 (2016-05-03)
+
+### Production
+
+* Add notification icons
+* Add "Open Most Recent Issue in Browser" to context menu
+* Decrease useless access by keeping fetch mode
+* Upgrade notie dependency to ^3.2.0
+* Add `return this` for method chaining
+* Fix `window.onload` -> `window.addEventListener('load')` for consistency
+* Move 'use strict' to global scope
+* Remove unused variables
+
+### Development
+
+* Upgrade electron-builder dependency to ^3.16.0
+* Upgrade electron-prebuilt dependency to 0.37.8
+* Remove electron-packager from package.json
+* Introduce new cross-platform package options
+* Remove unused configuration file for building installers
+* Introduce eslint for linting JS file
+* Introduce csslint for linting CSS file
+* Add `npm run release`
+
 ## 0.4.0 (2016-01-17)
 
 ### Production
