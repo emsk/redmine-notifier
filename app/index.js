@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(() => {
   const DEFAULT_FETCH_INTERVAL_SEC = 600;
   const NOTIE_DISPLAY_SEC = 1.5;
   const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
@@ -46,8 +46,6 @@
      * Initialize the application menu and context menu.
      */
     initMenu() {
-      const _this = this;
-
       const appMenu = Menu.buildFromTemplate([
         {
           label: 'Edit',
@@ -65,21 +63,21 @@
       this._contextMenu = Menu.buildFromTemplate([
         {
           label: 'Open Most Recent Issue in Browser',
-          click: function() {
-            shell.openExternal(_this._settings.url + '/issues/' + _this._mostRecentIssueId);
-            _this.setNormalIcon();
+          click: () => {
+            shell.openExternal(this._settings.url + '/issues/' + this._mostRecentIssueId);
+            this.setNormalIcon();
           },
           enabled: false
         },
         {
           label: 'Preferences',
-          click: function() {
+          click: () => {
             remote.getCurrentWindow().show();
           }
         },
         {
           label: 'Quit',
-          click: function() {
+          click: () => {
             remote.app.quit();
           }
         }
@@ -98,29 +96,27 @@
      * @return {Object} Current object.
      */
     initEventListener() {
-      const _this = this;
+      document.getElementById('save-button').addEventListener('click', () => {
+        this.readScreenSettings();
 
-      document.getElementById('save-button').addEventListener('click', function() {
-        _this.readScreenSettings();
-
-        if (_this.validateSettings()) {
-          _this.initFetch()
+        if (this.validateSettings()) {
+          this.initFetch()
             .updateSettings();
         } else {
-          _this.readStoredSettings();
+          this.readStoredSettings();
         }
 
         notie.alert(1, 'Settings have been saved.', NOTIE_DISPLAY_SEC);
       });
 
-      document.getElementById('close-button').addEventListener('click', function() {
-        _this.readStoredSettings()
+      document.getElementById('close-button').addEventListener('click', () => {
+        this.readStoredSettings()
           .displaySettings();
         remote.getCurrentWindow().hide();
       });
 
-      document.getElementById('test-connection-button').addEventListener('click', function() {
-        _this.testConnection(FETCH_MODE.TIME);
+      document.getElementById('test-connection-button').addEventListener('click', () => {
+        this.testConnection(FETCH_MODE.TIME);
       });
 
       return this;
@@ -224,13 +220,12 @@
      * @return {Object} Current object.
      */
     initFetch() {
-      const _this = this;
       const intervalMsec = 1000 * (this._settings.fetchIntervalSec || DEFAULT_FETCH_INTERVAL_SEC);
 
       clearInterval(this._fetchTimer);
 
-      this._fetchTimer = setInterval(function() {
-        _this.fetch(_this._fetchMode || FETCH_MODE.TIME);
+      this._fetchTimer = setInterval(() => {
+        this.fetch(this._fetchMode || FETCH_MODE.TIME);
       }, intervalMsec);
 
       return this;
@@ -242,12 +237,11 @@
      * @return {Object} Current object.
      */
     fetch(mode) {
-      const _this = this;
       const xhr = new XMLHttpRequest();
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
-          _this.handleResponseFetch(mode, xhr.status, xhr.responseText);
+          this.handleResponseFetch(mode, xhr.status, xhr.responseText);
         }
       };
 
@@ -317,13 +311,12 @@
      * @return {Object} Current object.
      */
     testConnection(mode) {
-      const _this = this;
       const xhr = new XMLHttpRequest();
       const pageSettings = this.getPageSettings();
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
-          _this.handleResponseTestConnection(mode, xhr.status);
+          this.handleResponseTestConnection(mode, xhr.status);
         }
       };
 
@@ -395,7 +388,6 @@
      * @return {Object} Current object.
      */
     notify(issues) {
-      const _this = this;
       const issueCount = issues.length;
 
       if (issueCount === 0) return this;
@@ -419,13 +411,13 @@
 
       notifier.removeAllListeners();
 
-      notifier.once('click', function() {
-        shell.openExternal(_this._settings.url + '/issues/' + _this._mostRecentIssueId);
-        _this.setNormalIcon();
+      notifier.once('click', () => {
+        shell.openExternal(this._settings.url + '/issues/' + this._mostRecentIssueId);
+        this.setNormalIcon();
         notifier.removeAllListeners();
       });
 
-      notifier.once('timeout', function() {
+      notifier.once('timeout', () => {
         notifier.removeAllListeners();
       });
 
@@ -456,7 +448,7 @@
     }
   }
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', () => {
     const redmineNotifier = new RedmineNotifier();
     redmineNotifier.initMenu()
       .initEventListener()
@@ -469,5 +461,5 @@
       redmineNotifier.initFetch();
     }
   });
-}());
+})();
 

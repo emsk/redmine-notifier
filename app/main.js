@@ -1,11 +1,11 @@
 'use strict';
 
-(function() {
+(() => {
   const app = require('app');
   const BrowserWindow = require('browser-window');
   let win = null;
 
-  app.on('window-all-closed', function() {
+  app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
       app.quit();
     }
@@ -14,7 +14,7 @@
   // Avoid the slow performance issue when renderer window is hidden
   app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
-  app.on('ready', function() {
+  app.on('ready', () => {
     if (process.platform === 'darwin') {
       app.dock.hide();
     }
@@ -29,9 +29,9 @@
 
     win.loadURL('file://' + __dirname + '/index.html');
 
-    win.on('closed', function() {
+    win.on('closed', () => {
       win = null;
     });
   });
-}());
+})();
 
