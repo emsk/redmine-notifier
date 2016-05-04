@@ -3,7 +3,8 @@
     "strict": "error",
     "indent": ["error", 2],
     "quotes": ["error", "single"],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "no-var": "error"
   },
   "env": {
     "browser": true,

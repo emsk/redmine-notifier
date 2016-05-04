@@ -1,9 +1,9 @@
 'use strict';
 
 (function() {
-  var app = require('app');
-  var BrowserWindow = require('browser-window');
-  var win = null;
+  const app = require('app');
+  const BrowserWindow = require('browser-window');
+  let win = null;
 
   app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') {

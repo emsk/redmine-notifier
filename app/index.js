@@ -9,15 +9,15 @@
   const COLOR_ICON_FILENAME_24 = 'redmine_icon_color_24.png';
   const COLOR_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_color_24_notification.png';
 
-  var remote = window.require('remote');
-  var shell = remote.require('shell');
-  var Menu = remote.require('menu');
-  var Tray = remote.require('tray');
-  var fs = require('fs');
-  var notie = require('notie');
-  var notifier = require('node-notifier');
+  const remote = window.require('remote');
+  const shell = remote.require('shell');
+  const Menu = remote.require('menu');
+  const Tray = remote.require('tray');
+  const fs = require('fs');
+  const notie = require('notie');
+  const notifier = require('node-notifier');
 
-  var FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
+  const FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
 
   /**
    * Initialize the RedmineNotifier object.
@@ -45,9 +45,9 @@
    * Initialize the application menu and context menu.
    */
   RedmineNotifier.prototype.initMenu = function() {
-    var _this = this;
+    const _this = this;
 
-    var appMenu = Menu.buildFromTemplate([
+    const appMenu = Menu.buildFromTemplate([
       {
         label: 'Edit',
         submenu: [
@@ -97,7 +97,7 @@
    * @return {Object} Current object.
    */
   RedmineNotifier.prototype.initEventListener = function() {
-    var _this = this;
+    const _this = this;
 
     document.getElementById('save-button').addEventListener('click', function() {
       _this.readScreenSettings();
@@ -223,8 +223,8 @@
    * @return {Object} Current object.
    */
   RedmineNotifier.prototype.initFetch = function() {
-    var _this = this;
-    var intervalMsec = 1000 * (this._settings.fetchIntervalSec || DEFAULT_FETCH_INTERVAL_SEC);
+    const _this = this;
+    const intervalMsec = 1000 * (this._settings.fetchIntervalSec || DEFAULT_FETCH_INTERVAL_SEC);
 
     clearInterval(this._fetchTimer);
 
@@ -241,8 +241,8 @@
    * @return {Object} Current object.
    */
   RedmineNotifier.prototype.fetch = function(mode) {
-    var _this = this;
-    var xhr = new XMLHttpRequest();
+    const _this = this;
+    const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
@@ -293,11 +293,11 @@
    * @return {Object[]} Processed issues.
    */
   RedmineNotifier.prototype.pickIssues = function(responseIssues) {
-    var responseIssueCount = responseIssues.length;
-    var lastExecutionTime = new Date(this._lastExecutionTime).getTime();
-    var issues = [];
-    var i;
-    var updatedTime;
+    const responseIssueCount = responseIssues.length;
+    const lastExecutionTime = new Date(this._lastExecutionTime).getTime();
+    const issues = [];
+    let i;
+    let updatedTime;
 
     for (i = 0; i < responseIssueCount; i++) {
       updatedTime = new Date(responseIssues[i].updated_on).getTime();
@@ -316,9 +316,9 @@
    * @return {Object} Current object.
    */
   RedmineNotifier.prototype.testConnection = function(mode) {
-    var _this = this;
-    var xhr = new XMLHttpRequest();
-    var pageSettings = this.getPageSettings();
+    const _this = this;
+    const xhr = new XMLHttpRequest();
+    const pageSettings = this.getPageSettings();
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
@@ -363,7 +363,7 @@
    * @return {string} Request parameters.
    */
   RedmineNotifier.prototype.getRequestParams = function(mode, projectId) {
-    var params = [
+    const params = [
       'updated_on=%3E%3D' + this.getLastExecutionTime(mode),
       'sort=updated_on:desc'
     ];
@@ -394,12 +394,12 @@
    * @return {Object} Current object.
    */
   RedmineNotifier.prototype.notify = function(issues) {
-    var _this = this;
-    var issueCount = issues.length;
+    const _this = this;
+    const issueCount = issues.length;
 
     if (issueCount === 0) return this;
 
-    var appDir = __dirname + '.unpacked'; // Production
+    let appDir = __dirname + '.unpacked'; // Production
     try {
       fs.statSync(appDir);
     } catch(e) {
@@ -455,7 +455,7 @@
   };
 
   window.addEventListener('load', function() {
-    var redmineNotifier = new RedmineNotifier();
+    const redmineNotifier = new RedmineNotifier();
     redmineNotifier.initMenu()
       .initEventListener()
       .displayDefaultSettings()
