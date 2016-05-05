@@ -288,19 +288,12 @@
      * @return {Object[]} Processed issues.
      */
     pickIssues(responseIssues) {
-      const responseIssueCount = responseIssues.length;
       const lastExecutionTime = new Date(this._lastExecutionTime).getTime();
-      const issues = [];
-      let i;
-      let updatedTime;
 
-      for (i = 0; i < responseIssueCount; i++) {
-        updatedTime = new Date(responseIssues[i].updated_on).getTime();
-
-        if (updatedTime >= lastExecutionTime) {
-          issues.push(responseIssues[i]);
-        }
-      }
+      const issues = responseIssues.filter((issue) => {
+        const updatedTime = new Date(issue.updated_on).getTime();
+        return updatedTime >= lastExecutionTime;
+      });
 
       return issues;
     }
