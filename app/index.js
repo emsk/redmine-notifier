@@ -44,6 +44,7 @@
 
     /**
      * Initialize the application menu and context menu.
+     * @return {Object} Current object.
      */
     initMenu() {
       const appMenu = Menu.buildFromTemplate([
