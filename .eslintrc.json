@@ -5,6 +5,8 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "no-var": "error",
+    "prefer-template": "error",
+    "template-curly-spacing": ["error", "never"],
     "require-jsdoc": ["warn", {
       "require": {
         "FunctionDeclaration": true,

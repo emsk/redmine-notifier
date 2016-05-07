@@ -37,11 +37,11 @@
       this._mostRecentIssueId = null;
 
       if (process.platform === 'darwin') {
-        this._iconFilePath             = __dirname + '/images/' + BLACK_ICON_FILENAME_24;
-        this._notificationIconFilePath = __dirname + '/images/' + BLACK_ICON_FILENAME_24_NOTIFICATION;
+        this._iconFilePath             = `${__dirname}/images/${BLACK_ICON_FILENAME_24}`;
+        this._notificationIconFilePath = `${__dirname}/images/${BLACK_ICON_FILENAME_24_NOTIFICATION}`;
       } else {
-        this._iconFilePath             = __dirname + '/images/' + COLOR_ICON_FILENAME_24;
-        this._notificationIconFilePath = __dirname + '/images/' + COLOR_ICON_FILENAME_24_NOTIFICATION;
+        this._iconFilePath             = `${__dirname}/images/${COLOR_ICON_FILENAME_24}`;
+        this._notificationIconFilePath = `${__dirname}/images/${COLOR_ICON_FILENAME_24_NOTIFICATION}`;
       }
     }
 
@@ -68,7 +68,7 @@
         {
           label: 'Open Most Recent Issue in Browser',
           click: () => {
-            shell.openExternal(this._settings.url + '/issues/' + this._mostRecentIssueId);
+            shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
             this.setNormalIcon();
           },
           enabled: false
@@ -249,7 +249,7 @@
         }
       };
 
-      xhr.open('GET', this._settings.url + '/issues.json' + this.getRequestParams(mode, this._settings.projectId));
+      xhr.open('GET', `${this._settings.url}/issues.json${this.getRequestParams(mode, this._settings.projectId)}`);
       xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
       xhr.send();
 
@@ -317,7 +317,7 @@
         }
       };
 
-      xhr.open('GET', pageSettings.url + '/issues.json' + this.getRequestParams(mode, pageSettings.projectId));
+      xhr.open('GET', `${pageSettings.url}/issues.json${this.getRequestParams(mode, pageSettings.projectId)}`);
       xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
       xhr.send();
 
@@ -355,15 +355,15 @@
      */
     getRequestParams(mode, projectId) {
       const params = [
-        'updated_on=%3E%3D' + this.getLastExecutionTime(mode),
+        `updated_on=%3E%3D${this.getLastExecutionTime(mode)}`,
         'sort=updated_on:desc'
       ];
 
       if (typeof projectId === 'string' && projectId !== '') {
-        params.unshift('project_id=' + projectId);
+        params.unshift(`project_id=${projectId}`);
       }
 
-      return '?' + params.join('&');
+      return `?${params.join('&')}`;
     }
 
     /**
@@ -389,7 +389,7 @@
 
       if (issueCount === 0) return this;
 
-      let appDir = __dirname + '.unpacked'; // Production
+      let appDir = `${__dirname}.unpacked`; // Production
       try {
         fs.statSync(appDir);
       } catch(e) {
@@ -400,16 +400,16 @@
 
       // Display the latest issue's subject only
       notifier.notify({
-        title: '(' + issueCount + ') Redmine Notifier',
+        title: `(${issueCount}) Redmine Notifier`,
         message: issues[0].subject,
-        icon: appDir + '/images/' + COLOR_ICON_FILENAME_64,
+        icon: `${appDir}/images/${COLOR_ICON_FILENAME_64}`,
         wait: true
       });
 
       notifier.removeAllListeners();
 
       notifier.once('click', () => {
-        shell.openExternal(this._settings.url + '/issues/' + this._mostRecentIssueId);
+        shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
         this.setNormalIcon();
         notifier.removeAllListeners();
       });
