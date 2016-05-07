@@ -19,6 +19,9 @@
 
   const FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
 
+  /**
+   * Class to check updated issues.
+   */
   class RedmineNotifier {
     /**
      * Initialize the RedmineNotifier object.
