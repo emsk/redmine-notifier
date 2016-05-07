@@ -4,7 +4,15 @@
     "indent": ["error", 2],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
-    "no-var": "error"
+    "no-var": "error",
+    "require-jsdoc": ["warn", {
+      "require": {
+        "FunctionDeclaration": true,
+        "ClassDeclaration": true,
+        "MethodDefinition": true
+      }
+    }],
+    "valid-jsdoc": "warn"
   },
   "env": {
     "browser": true,
