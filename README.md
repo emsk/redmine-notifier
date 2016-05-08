@@ -53,10 +53,14 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 
 ##### Development
 
+* [chai](https://github.com/chaijs/chai)
+* [chai-as-promised](https://github.com/domenic/chai-as-promised)
 * [csslint](https://github.com/CSSLint/csslint)
 * [electron-builder](https://github.com/electron-userland/electron-builder)
 * [electron-prebuilt](https://github.com/electron-userland/electron-prebuilt)
 * [eslint](https://github.com/eslint/eslint)
+* [mocha](https://github.com/mochajs/mocha)
+* [spectron](https://github.com/electron/spectron)
 
 See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
@@ -89,6 +93,12 @@ npm run pack
 
 ```sh
 npm run lint
+```
+
+### Testing app
+
+```sh
+npm test
 ```
 
 See `scripts` in [`package.json`](package.json) with regard to other commands.
