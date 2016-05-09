@@ -47,7 +47,9 @@ describe('application launch', function() {
       .browserWindow.isMenuBarVisible().should.eventually.be.true
       .browserWindow.isVisibleOnAllWorkspaces().should.eventually.be.false
       .browserWindow.isDevToolsOpened().should.eventually.be.false
-      .browserWindow.isDevToolsFocused().should.eventually.be.false;
+      .browserWindow.isDevToolsFocused().should.eventually.be.false
+      .getTitle().should.eventually.equal('Preferences')
+      .getText('h1:first-child').should.eventually.equal('Redmine Notifier');
   });
 });
 
