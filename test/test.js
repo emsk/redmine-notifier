@@ -1,8 +1,6 @@
 'use strict';
 
 describe('application launch', function() {
-  this.timeout(10000);
-
   const Application = require('spectron').Application;
   const chai = require('chai');
   const chaiAsPromised = require('chai-as-promised');
