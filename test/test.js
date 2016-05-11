@@ -46,6 +46,7 @@ describe('application launch', function() {
       .browserWindow.isVisibleOnAllWorkspaces().should.eventually.be.false
       .browserWindow.isDevToolsOpened().should.eventually.be.false
       .browserWindow.isDevToolsFocused().should.eventually.be.false
+      .getUrl().should.eventually.match(/^file:\/\/.+\/index.html$/)
       .getTitle().should.eventually.equal('Preferences')
       .getText('h1:first-child').should.eventually.equal('Redmine Notifier');
   });
