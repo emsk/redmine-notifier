@@ -1,5 +1,6 @@
 # Redmine Notifier
 
+[![Build Status](https://travis-ci.org/emsk/redmine-notifier.svg?branch=master)](https://travis-ci.org/emsk/redmine-notifier)
 [![Code Climate](https://codeclimate.com/github/emsk/redmine-notifier/badges/gpa.svg)](https://codeclimate.com/github/emsk/redmine-notifier)
 [![Dependency Status](https://gemnasium.com/emsk/redmine-notifier.svg)](https://gemnasium.com/emsk/redmine-notifier)
 [![Inline docs](http://inch-ci.org/github/emsk/redmine-notifier.svg?branch=master)](http://inch-ci.org/github/emsk/redmine-notifier)
