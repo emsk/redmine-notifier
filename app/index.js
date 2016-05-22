@@ -9,10 +9,11 @@
   const COLOR_ICON_FILENAME_24 = 'redmine_icon_color_24.png';
   const COLOR_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_color_24_notification.png';
 
-  const remote = window.require('remote');
-  const shell = remote.require('shell');
-  const Menu = remote.require('menu');
-  const Tray = remote.require('tray');
+  const electron = require('electron');
+  const remote = electron.remote;
+  const shell = remote.shell;
+  const Menu = remote.Menu;
+  const Tray = remote.Tray;
   const fs = require('fs');
   const notie = require('notie');
   const notifier = require('node-notifier');
