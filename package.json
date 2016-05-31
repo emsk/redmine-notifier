@@ -4,9 +4,10 @@
   "scripts": {
     "start": "electron ./app/main.js",
     "prepare": "./bin/prepare.sh",
-    "lint": "npm run lint:js && npm run lint:css",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:text",
     "lint:js": "./bin/lint-js.sh",
     "lint:css": "./bin/lint-css.sh",
+    "lint:text": "./bin/lint-text.sh",
     "build": "npm run build:osx && npm run build:win",
     "build:osx": "./bin/build-osx.sh",
     "build:win": "./bin/build-win.sh",
@@ -28,7 +29,9 @@
     "electron-prebuilt": "1.2.0",
     "eslint": "^2.11.0",
     "mocha": "^2.5.3",
-    "spectron": "~3.1.0"
+    "spectron": "~3.1.0",
+    "textlint": "^6.9.0",
+    "textlint-rule-write-good": "^0.1.4"
   },
   "build": {
     "app-bundle-id": "redmine-notifier",
