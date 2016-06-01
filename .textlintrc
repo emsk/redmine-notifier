@@ -1,5 +1,8 @@
 {
   "rules": {
-    "write-good": true
+    "write-good": {
+      "passive": false,
+      "adverb": false
+    }
   }
 }
