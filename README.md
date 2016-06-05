@@ -62,6 +62,8 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 * [eslint](https://github.com/eslint/eslint)
 * [mocha](https://github.com/mochajs/mocha)
 * [spectron](https://github.com/electron/spectron)
+* [textlint](https://github.com/textlint/textlint)
+* [textlint-rule-write-good](https://github.com/nodaguti/textlint-rule-write-good)
 
 See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
