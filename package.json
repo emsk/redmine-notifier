@@ -25,7 +25,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "csslint": "^0.10.0",
-    "electron-builder": "~4.2.6",
+    "electron-builder": "~5.0.3",
     "electron-prebuilt": "1.2.2",
     "eslint": "^2.11.0",
     "mocha": "^2.5.3",
@@ -39,7 +39,7 @@
     "asar": {
       "unpack": "**/app/{node_modules/node-notifier/vendor,images}/**"
     },
-    "ignore": "\\.DS_Store|npm-debug\\.log|^/etc",
+    "files": ["**/*", "!**/npm-debug\\.log", "!etc"],
     "app-copyright": "Copyright (c) 2015-2016 emsk",
     "osx": {
       "icon-size": 120,
