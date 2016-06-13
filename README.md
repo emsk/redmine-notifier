@@ -24,7 +24,7 @@ Also, the subject is shown only about the latest issue.
 
 ## Sub Notifications
 
-When Redmine Notifier is started, An icon appears in the menu bar or task tray.
+When Redmine Notifier is started, an icon appears in the menu bar or task tray.
 If there is a notification in the most recent fetch, the icon is replaced by the notification icon.
 
 ##### Menu Icon (OS X)
