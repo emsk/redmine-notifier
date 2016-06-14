@@ -92,7 +92,7 @@ npm run build
 npm run pack
 ```
 
-### Linting JavaScript and CSS files
+### Linting JavaScript, CSS, and Markdown files
 
 ```sh
 npm run lint
