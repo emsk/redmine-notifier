@@ -34,7 +34,7 @@
     "textlint-rule-write-good": "^0.1.4"
   },
   "build": {
-    "app-bundle-id": "redmine-notifier",
+    "appId": "redmine-notifier",
     "app-category-type": "public.app-category.productivity",
     "asar": {
       "unpack": "**/app/{node_modules/node-notifier/vendor,images}/**"
