@@ -8,11 +8,11 @@
     "lint:js": "./bin/lint-js.sh",
     "lint:css": "./bin/lint-css.sh",
     "lint:text": "./bin/lint-text.sh",
-    "build": "npm run build:osx && npm run build:win",
-    "build:osx": "./bin/build-osx.sh",
+    "build": "npm run build:mac && npm run build:win",
+    "build:mac": "./bin/build-mac.sh",
     "build:win": "./bin/build-win.sh",
-    "pack": "npm run pack:osx && npm run pack:win",
-    "pack:osx": "./bin/pack-osx.sh",
+    "pack": "npm run pack:mac && npm run pack:win",
+    "pack:mac": "./bin/pack-mac.sh",
     "pack:win": "./bin/pack-win.sh",
     "test": "./bin/test.sh",
     "release": "npm run prepare && npm run pack"
@@ -25,7 +25,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "csslint": "^0.10.0",
-    "electron-builder": "~5.4.0",
+    "electron-builder": "~5.6.3",
     "electron-prebuilt": "1.2.3",
     "eslint": "^2.13.0",
     "mocha": "^2.5.3",
@@ -41,13 +41,15 @@
     },
     "files": ["**/*", "!**/npm-debug\\.log", "!etc"],
     "app-copyright": "Copyright (c) 2015-2016 emsk",
-    "osx": {
+    "mac": {
+      "target": "dmg"
+    },
+    "dmg": {
       "icon-size": 120,
       "contents": [
         { "x": 370, "y": 300, "type": "link", "path": "/Applications" },
         { "x": 130, "y": 300, "type": "file" }
-      ],
-      "target": "dmg"
+      ]
     }
   }
 }

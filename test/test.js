@@ -5,7 +5,7 @@ describe('application launch', function() {
   const chai = require('chai');
   const chaiAsPromised = require('chai-as-promised');
   const app = new Application({
-    path: `${__dirname}/../dist/osx/Redmine Notifier.app/Contents/MacOS/Redmine Notifier`
+    path: `${__dirname}/../dist/mac/Redmine Notifier.app/Contents/MacOS/Redmine Notifier`
   });
 
   chai.should();

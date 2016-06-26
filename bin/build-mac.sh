@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 cd $(dirname $0)/..
-$(npm bin)/build --osx --x64
+$(npm bin)/build --mac --x64
