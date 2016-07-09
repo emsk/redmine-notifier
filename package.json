@@ -30,7 +30,7 @@
     "eslint": "^3.0.1",
     "mocha": "^2.5.3",
     "spectron": "~3.2.6",
-    "textlint": "^6.11.1",
+    "textlint": "^7.0.1",
     "textlint-rule-write-good": "^0.1.4"
   },
   "build": {
