@@ -26,7 +26,7 @@
     "chai-as-promised": "^5.3.0",
     "csslint": "^0.10.0",
     "electron-builder": "~5.11.2",
-    "electron-prebuilt": "1.2.3",
+    "electron-prebuilt": "1.2.5",
     "eslint": "^2.13.0",
     "mocha": "^2.5.3",
     "spectron": "~3.2.0",
