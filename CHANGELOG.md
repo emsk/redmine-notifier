@@ -1,5 +1,25 @@
 # Change Log 
 
+## 0.6.0 (2016-07-10)
+
+### Production
+
+* Update to Electron 1.2.6
+* Change animated GIF to display during install (Windows only)
+* Change syntax to ES2015
+* Replace `for` statement with `filter()`
+* Remove verbose `label` and `accelerator` options in `MenuItem`
+
+### Development
+
+* Update electron-prebuilt dependency to 1.2.6
+* Update electron-builder dependency to ~5.12.0
+* Add simple tests using spectron, mocha, chai, and chai-as-promised
+* Add textlint for linting Markdown file
+* Update eslint dependency to ^3.0.1
+* Add eslint rules for jsdoc
+* Change `#!/bin/bash` -> `#!/usr/bin/env bash` for flexibility
+
 ## 0.5.0 (2016-05-03)
 
 ### Production
