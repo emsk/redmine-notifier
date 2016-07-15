@@ -107,11 +107,10 @@
         if (this.validateSettings()) {
           this.initFetch()
             .updateSettings();
+          notie.alert(1, 'Settings have been saved.', NOTIE_DISPLAY_SEC);
         } else {
           this.readStoredSettings();
         }
-
-        notie.alert(1, 'Settings have been saved.', NOTIE_DISPLAY_SEC);
       });
 
       document.getElementById('close-button').addEventListener('click', () => {
