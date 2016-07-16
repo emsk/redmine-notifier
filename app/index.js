@@ -107,7 +107,7 @@
         if (this.validateSettings()) {
           this.initFetch()
             .updateSettings();
-          notie.alert(1, 'Settings have been saved.', NOTIE_DISPLAY_SEC);
+          notie.alert('success', 'Settings have been saved.', NOTIE_DISPLAY_SEC);
         } else {
           this.readStoredSettings();
         }
@@ -214,7 +214,7 @@
       if (this._settings.url && this._settings.apiKey) {
         return true;
       } else {
-        notie.alert(3, 'Please enter required fields.', NOTIE_DISPLAY_SEC);
+        notie.alert('error', 'Please enter required fields.', NOTIE_DISPLAY_SEC);
         return false;
       }
     }
@@ -332,7 +332,7 @@
      */
     handleResponseTestConnection(mode, status) {
       if (status === 200) {
-        notie.alert(1, 'Connection succeeded.', NOTIE_DISPLAY_SEC);
+        notie.alert('success', 'Connection succeeded.', NOTIE_DISPLAY_SEC);
         return this;
       }
 
@@ -342,7 +342,7 @@
         return this;
       }
 
-      notie.alert(3, 'Connection failed.', NOTIE_DISPLAY_SEC);
+      notie.alert('error', 'Connection failed.', NOTIE_DISPLAY_SEC);
 
       return this;
     }
