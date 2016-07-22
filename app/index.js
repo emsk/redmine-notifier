@@ -16,26 +16,26 @@
   const Tray = remote.Tray;
   const fs = require('fs');
   const notie = require('notie');
-  const notifier = require('node-notifier');
+  const nodeNotifier = require('node-notifier');
 
   const FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
 
+  let notifierScreen = null;
+
   /**
-   * Class to check updated issues.
+   * Class to handle settings screen.
    */
-  class RedmineNotifier {
+  class RedmineNotifierScreen {
     /**
-     * Initialize the RedmineNotifier object.
+     * Initialize the RedmineNotifierScreen object.
      * @constructor
      */
     constructor() {
+      this._notifiers = null;
+      this._currentNotifierIndex = null;
       this._tray = null;
-      this._lastExecutionTime = null;
-      this._settings = null;
-      this._fetchTimer = null;
-      this._fetchMode = null;
       this._contextMenu = null;
-      this._mostRecentIssueId = null;
+      this._mostRecentNotifierIndex = null;
 
       if (process.platform === 'darwin') {
         this._iconFilePath             = `${__dirname}/images/${BLACK_ICON_FILENAME_24}`;
@@ -44,6 +44,17 @@
         this._iconFilePath             = `${__dirname}/images/${COLOR_ICON_FILENAME_24}`;
         this._notificationIconFilePath = `${__dirname}/images/${COLOR_ICON_FILENAME_24_NOTIFICATION}`;
       }
+    }
+
+    /**
+     * Initialize the RedmineNotifier objects.
+     * @param {RedmineNotifier[]} notifiers - RedmineNotifier objects.
+     * @return {Object} Current object.
+     */
+    initNotifiers(notifiers) {
+      this._notifiers = notifiers;
+      this._currentNotifierIndex = 0;
+      return this;
     }
 
     /**
@@ -69,8 +80,9 @@
         {
           label: 'Open Most Recent Issue in Browser',
           click: () => {
-            shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
-            this.setNormalIcon();
+            const notifier = this._notifiers[this._mostRecentNotifierIndex];
+            shell.openExternal(`${notifier._settings.url}/issues/${notifier._mostRecentIssueId}`);
+            notifierScreen.setNormalIcon();
           },
           enabled: false
         },
@@ -102,25 +114,32 @@
      */
     initEventListener() {
       document.getElementById('save-button').addEventListener('click', () => {
-        this.readScreenSettings();
+        const notifier = this._notifiers[this._currentNotifierIndex];
+        notifier.readScreenSettings();
 
-        if (this.validateSettings()) {
-          this.initFetch()
+        if (notifier.validateSettings()) {
+          notifier.initFetch()
             .updateSettings();
           notie.alert('success', 'Settings have been saved.', NOTIE_DISPLAY_SEC);
         } else {
-          this.readStoredSettings();
+          notifier.readStoredSettings();
         }
       });
 
       document.getElementById('close-button').addEventListener('click', () => {
-        this.readStoredSettings()
+        const notifier = this._notifiers[this._currentNotifierIndex];
+        notifier.readStoredSettings()
           .displaySettings();
         remote.getCurrentWindow().hide();
       });
 
       document.getElementById('test-connection-button').addEventListener('click', () => {
-        this.testConnection(FETCH_MODE.TIME);
+        const notifier = this._notifiers[this._currentNotifierIndex];
+        notifier.testConnection(FETCH_MODE.TIME);
+      });
+
+      document.getElementById('other-urls-button').addEventListener('click', () => {
+        this.openURLMenu();
       });
 
       return this;
@@ -133,6 +152,83 @@
     displayDefaultSettings() {
       document.getElementById('default-fetch-interval-sec').innerHTML = DEFAULT_FETCH_INTERVAL_SEC;
       return this;
+    }
+
+    /**
+     * Open the URL menu.
+     * @return {Object} Current object.
+     */
+    openURLMenu() {
+      notie.select('Stored URLs',
+        this.getURLMenuItems(),
+        () => {
+          this._currentNotifierIndex = 0;
+          const notifier = this._notifiers[this._currentNotifierIndex];
+          notifier.readStoredSettings()
+            .displaySettings();
+        },
+        () => {
+          this._currentNotifierIndex = 1;
+          const notifier = this._notifiers[this._currentNotifierIndex];
+          notifier.readStoredSettings()
+            .displaySettings();
+        }
+      );
+
+      return this;
+    }
+
+    /**
+     * Get the URL menu items.
+     * @return {string[]} Menu items.
+     */
+    getURLMenuItems() {
+      return [
+        { title: this._notifiers[0].getStoredSetting('url'), color: '#628db6' },
+        { title: this._notifiers[1].getStoredSetting('url'), color: '#628db6' }
+      ];
+    }
+
+    /**
+     * Set normal icon and disable "Open Most Recent Issue in Browser" in context menu.
+     * @return {Object} Current object.
+     */
+    setNormalIcon() {
+      this._tray.setImage(this._iconFilePath);
+      this._contextMenu.items[0].enabled = false;
+      this._mostRecentNotifierIndex = null;
+      return this;
+    }
+
+    /**
+     * Set notification icon and enable "Open Most Recent Issue in Browser" in context menu.
+     * @param {number} index - Index of the most recent RedmineNotifier object.
+     * @return {Object} Current object.
+     */
+    setNotificationIcon(index) {
+      this._tray.setImage(this._notificationIconFilePath);
+      this._contextMenu.items[0].enabled = true;
+      this._mostRecentNotifierIndex = index;
+      return this;
+    }
+  }
+
+  /**
+   * Class to check updated issues.
+   */
+  class RedmineNotifier {
+    /**
+     * Initialize the RedmineNotifier object.
+     * @constructor
+     * @param {number} index - Index of the object.
+     */
+    constructor(index) {
+      this._index = index;
+      this._lastExecutionTime = null;
+      this._settings = null;
+      this._fetchTimer = null;
+      this._fetchMode = null;
+      this._mostRecentIssueId = null;
     }
 
     /**
@@ -175,13 +271,22 @@
      */
     readStoredSettings() {
       this._settings = {
-        url: localStorage.getItem('url'),
-        apiKey: localStorage.getItem('apiKey'),
-        projectId: localStorage.getItem('projectId'),
-        fetchIntervalSec: localStorage.getItem('fetchIntervalSec')
+        url: localStorage.getItem(`url${this._index}`),
+        apiKey: localStorage.getItem(`apiKey${this._index}`),
+        projectId: localStorage.getItem(`projectId${this._index}`),
+        fetchIntervalSec: localStorage.getItem(`fetchIntervalSec${this._index}`)
       };
 
       return this;
+    }
+
+    /**
+     * Get the setting from the localStorage.
+     * @param {string} key - Setting key.
+     * @return {string} Setting value.
+     */
+    getStoredSetting(key) {
+      return localStorage.getItem(`${key}${this._index}`);
     }
 
     /**
@@ -190,7 +295,7 @@
      */
     updateLastExecutionTime() {
       this._lastExecutionTime = (new Date()).toISOString().replace(/\.\d+Z$/, 'Z');
-      localStorage.setItem('lastExecutionTime', this._lastExecutionTime);
+      localStorage.setItem(`lastExecutionTime${this._index}`, this._lastExecutionTime);
       return this;
     }
 
@@ -199,10 +304,10 @@
      * @return {Object} Current object.
      */
     updateSettings() {
-      localStorage.setItem('url', this._settings.url);
-      localStorage.setItem('apiKey', this._settings.apiKey);
-      localStorage.setItem('projectId', this._settings.projectId);
-      localStorage.setItem('fetchIntervalSec', this._settings.fetchIntervalSec);
+      localStorage.setItem(`url${this._index}`, this._settings.url);
+      localStorage.setItem(`apiKey${this._index}`, this._settings.apiKey);
+      localStorage.setItem(`projectId${this._index}`, this._settings.projectId);
+      localStorage.setItem(`fetchIntervalSec${this._index}`, this._settings.fetchIntervalSec);
       return this;
     }
 
@@ -253,7 +358,7 @@
       xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
       xhr.send();
 
-      this.setNormalIcon();
+      notifierScreen.setNormalIcon();
 
       return this;
     }
@@ -396,67 +501,59 @@
         appDir = __dirname; // Development
       }
 
-      this.setNotificationIcon(issues[0].id);
+      this._mostRecentIssueId = issues[0].id;
+      notifierScreen.setNotificationIcon(this._index);
 
       // Display the latest issue's subject only
-      notifier.notify({
+      nodeNotifier.notify({
         title: `(${issueCount}) Redmine Notifier`,
         message: issues[0].subject,
         icon: `${appDir}/images/${COLOR_ICON_FILENAME_64}`,
         wait: true
       });
 
-      notifier.removeAllListeners();
+      nodeNotifier.removeAllListeners();
 
-      notifier.once('click', () => {
+      nodeNotifier.once('click', () => {
         shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
-        this.setNormalIcon();
-        notifier.removeAllListeners();
+        notifierScreen.setNormalIcon();
+        nodeNotifier.removeAllListeners();
       });
 
-      notifier.once('timeout', () => {
-        notifier.removeAllListeners();
+      nodeNotifier.once('timeout', () => {
+        nodeNotifier.removeAllListeners();
       });
 
-      return this;
-    }
-
-    /**
-     * Set normal icon and disable "Open Most Recent Issue in Browser" in context menu.
-     * @return {Object} Current object.
-     */
-    setNormalIcon() {
-      this._tray.setImage(this._iconFilePath);
-      this._contextMenu.items[0].enabled = false;
-      this._mostRecentIssueId = null;
-      return this;
-    }
-
-    /**
-     * Set notification icon and enable "Open Most Recent Issue in Browser" in context menu.
-     * @param {number} issueId - Most recent issue ID.
-     * @return {Object} Current object.
-     */
-    setNotificationIcon(issueId) {
-      this._tray.setImage(this._notificationIconFilePath);
-      this._contextMenu.items[0].enabled = true;
-      this._mostRecentIssueId = issueId;
       return this;
     }
   }
 
   window.addEventListener('load', () => {
-    const redmineNotifier = new RedmineNotifier();
-    redmineNotifier.initMenu()
-      .initEventListener()
-      .displayDefaultSettings()
-      .updateLastExecutionTime()
+    notie.setOptions({ colorInfo: '#3e5b76' });
+
+    const notifier1 = new RedmineNotifier(0);
+    notifier1.updateLastExecutionTime()
       .readStoredSettings()
       .displaySettings();
 
-    if (redmineNotifier.validateSettings()) {
-      redmineNotifier.initFetch();
+    if (notifier1.validateSettings()) {
+      notifier1.initFetch();
     }
+
+    const notifier2 = new RedmineNotifier(1);
+    notifier2.updateLastExecutionTime()
+      .readStoredSettings()
+      .displaySettings();
+
+    if (notifier2.validateSettings()) {
+      notifier2.initFetch();
+    }
+
+    notifierScreen = new RedmineNotifierScreen();
+    notifierScreen.initNotifiers([notifier1, notifier2])
+      .initMenu()
+      .initEventListener()
+      .displayDefaultSettings();
   });
 })();
 
