@@ -118,9 +118,17 @@ button:hover {
 
 #other-urls-button {
   position: absolute;
-  right: 50px;
+  left: 50px;
   bottom: 35px;
   padding: 6px;
   border: 2px solid #fff;
   font-size: 0.5em;
+}
+
+#delete-link {
+  position: absolute;
+  right: 50px;
+  bottom: 35px;
+  color: #fff;
+  font-size: 0.9em;
 }

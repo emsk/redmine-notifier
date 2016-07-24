@@ -142,6 +142,16 @@
         this.openURLMenu();
       });
 
+      document.getElementById('delete-link').addEventListener('click', () => {
+        notie.confirm('Are you sure you want to delete this setting?', 'Yes', 'No', () => {
+          const notifier = this._notifiers[this._currentNotifierIndex];
+          notifier.deleteStoredSettings()
+            .readStoredSettings()
+            .displaySettings();
+          notie.alert('success', 'Settings have been deleted.', NOTIE_DISPLAY_SEC);
+        });
+      });
+
       return this;
     }
 
@@ -308,6 +318,18 @@
       localStorage.setItem(`apiKey${this._index}`, this._settings.apiKey);
       localStorage.setItem(`projectId${this._index}`, this._settings.projectId);
       localStorage.setItem(`fetchIntervalSec${this._index}`, this._settings.fetchIntervalSec);
+      return this;
+    }
+
+    /**
+     * Delete the settings.
+     * @return {Object} Current object.
+     */
+    deleteStoredSettings() {
+      localStorage.removeItem(`url${this._index}`);
+      localStorage.removeItem(`apiKey${this._index}`);
+      localStorage.removeItem(`projectId${this._index}`);
+      localStorage.removeItem(`fetchIntervalSec${this._index}`);
       return this;
     }
 
