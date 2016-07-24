@@ -159,7 +159,7 @@
      * @return {Object} Current object.
      */
     openURLMenu() {
-      notie.select('Stored URLs',
+      notie.select('Stored URLs', 'Cancel',
         this.getURLMenuItems(),
         () => {
           this._currentNotifierIndex = 0;
