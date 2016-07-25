@@ -564,8 +564,7 @@
 
     const notifier2 = new RedmineNotifier(1);
     notifier2.updateLastExecutionTime()
-      .readStoredSettings()
-      .displaySettings();
+      .readStoredSettings();
 
     if (notifier2.validateSettings()) {
       notifier2.initFetch();
