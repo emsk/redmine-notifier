@@ -380,8 +380,6 @@
       xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
       xhr.send();
 
-      notifierScreen.setNormalIcon();
-
       return this;
     }
 
