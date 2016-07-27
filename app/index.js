@@ -170,33 +170,31 @@
      */
     openURLMenu() {
       notie.select('Stored URLs', 'Cancel',
-        this.getURLMenuItems(),
-        () => {
-          this._currentNotifierIndex = 0;
-          const notifier = this._notifiers[this._currentNotifierIndex];
-          notifier.readStoredSettings()
-            .displaySettings();
-        },
-        () => {
-          this._currentNotifierIndex = 1;
-          const notifier = this._notifiers[this._currentNotifierIndex];
-          notifier.readStoredSettings()
-            .displaySettings();
-        }
+        [
+          {
+            title: this._notifiers[0].getStoredSetting('url'),
+            color: '#628db6',
+            handler: () => {
+              this._currentNotifierIndex = 0;
+              const notifier = this._notifiers[this._currentNotifierIndex];
+              notifier.readStoredSettings()
+                .displaySettings();
+            }
+          },
+          {
+            title: this._notifiers[1].getStoredSetting('url'),
+            color: '#628db6',
+            handler: () => {
+              this._currentNotifierIndex = 1;
+              const notifier = this._notifiers[this._currentNotifierIndex];
+              notifier.readStoredSettings()
+                .displaySettings();
+            }
+          }
+        ]
       );
 
       return this;
-    }
-
-    /**
-     * Get the URL menu items.
-     * @return {string[]} Menu items.
-     */
-    getURLMenuItems() {
-      return [
-        { title: this._notifiers[0].getStoredSetting('url'), color: '#628db6' },
-        { title: this._notifiers[1].getStoredSetting('url'), color: '#628db6' }
-      ];
     }
 
     /**
