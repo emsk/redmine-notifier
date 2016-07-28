@@ -547,6 +547,13 @@
   }
 
   window.addEventListener('load', () => {
+    // Delete settings of Redmine Notifier <= 0.6.0
+    localStorage.removeItem('url');
+    localStorage.removeItem('apiKey');
+    localStorage.removeItem('projectId');
+    localStorage.removeItem('fetchIntervalSec');
+    localStorage.removeItem('lastExecutionTime');
+
     notie.setOptions({ colorInfo: '#3e5b76' });
 
     const notifier1 = new RedmineNotifier(0);
