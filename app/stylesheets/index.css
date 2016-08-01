@@ -73,6 +73,10 @@ button:hover {
   background-color: #3e5b76;
 }
 
+a {
+  -webkit-app-region: no-drag;
+}
+
 #main {
   margin: 0 auto;
   width: 760px;
@@ -131,4 +135,13 @@ button:hover {
   bottom: 35px;
   color: #fff;
   font-size: 0.9em;
+}
+
+#notie-confirm-yes,
+#notie-confirm-no,
+#notie-confirm-background,
+.notie-select-choice,
+#notie-select-cancel,
+#notie-select-background {
+  -webkit-app-region: no-drag;
 }
