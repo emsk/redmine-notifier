@@ -24,7 +24,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
-    "csslint": "^0.10.0",
+    "csslint": "^1.0.2",
     "electron-builder": "~5.20.0",
     "electron-prebuilt": "1.2.6",
     "eslint": "^3.2.0",
