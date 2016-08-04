@@ -1,15 +1,15 @@
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2');
-  font-weight: normal;
   font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2');
 }
 
 @font-face {
   font-family: 'Montserrat-Regular';
-  src: url('../fonts/Montserrat-Regular.ttf') format('truetype');
-  font-weight: normal;
   font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/Montserrat-Regular.ttf') format('truetype');
 }
 
 ::selection {
@@ -17,22 +17,22 @@
 }
 
 html {
-  width: 100%;
-  height: 100%;
   -webkit-app-region: drag;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-  margin: 0;
   background-color: #628db6;
   color: #fff;
   font-family: 'Montserrat-Regular';
   letter-spacing: 1px;
+  margin: 0;
 }
 
 h1 {
-  text-align: center;
   letter-spacing: 4px;
+  text-align: center;
 }
 
 table {
@@ -40,29 +40,29 @@ table {
 }
 
 th {
-  width: 270px;
   text-align: left;
+  width: 270px;
 }
 
 input {
-  padding: 0 3px;
-  height: 20px;
-  border-radius: 3px;
-  border: solid 1px #ccc;
-  font-size: 0.8em;
   -webkit-app-region: no-drag;
+  border: solid 1px #ccc;
+  border-radius: 3px;
+  font-size: 0.8em;
+  height: 20px;
+  padding: 0 3px;
 }
 
 button {
-  padding: 8px 20px;
+  -webkit-app-region: no-drag;
+  background-color: #628db6;
   border: 3px solid #fff;
   border-radius: 50px;
-  background-color: #628db6;
   color: #fff;
+  cursor: pointer;
   font: inherit;
   font-size: 0.6em;
-  cursor: pointer;
-  -webkit-app-region: no-drag;
+  padding: 8px 20px;
 }
 
 button:focus {
@@ -95,8 +95,8 @@ a {
 }
 
 .setting-number input {
-  width: 60px;
   text-align: right;
+  width: 60px;
 }
 
 .unit {
@@ -104,16 +104,16 @@ a {
 }
 
 #test-connection-button {
-  margin-left: 5px;
-  padding: 6px;
   border: 2px solid #fff;
   font-size: 0.8em;
+  margin-left: 5px;
+  padding: 6px;
 }
 
 #save-button-area {
+  font-size: 1.5em;
   margin-top: 30px;
   text-align: center;
-  font-size: 1.5em;
 }
 
 #save-button {
@@ -121,20 +121,20 @@ a {
 }
 
 #other-urls-button {
-  position: absolute;
-  left: 50px;
-  bottom: 35px;
-  padding: 6px;
   border: 2px solid #fff;
+  bottom: 35px;
   font-size: 0.5em;
+  left: 50px;
+  padding: 6px;
+  position: absolute;
 }
 
 #delete-link {
-  position: absolute;
-  right: 50px;
   bottom: 35px;
   color: #fff;
   font-size: 0.9em;
+  position: absolute;
+  right: 50px;
 }
 
 #notie-confirm-yes,
