@@ -35,12 +35,12 @@
   },
   "build": {
     "appId": "redmine-notifier",
-    "app-category-type": "public.app-category.productivity",
+    "category": "public.app-category.productivity",
     "asar": {
       "unpack": "**/app/{node_modules/node-notifier/vendor,images}/**"
     },
     "files": ["**/*", "!**/npm-debug\\.log", "!etc"],
-    "app-copyright": "Copyright (c) 2015-2016 emsk",
+    "copyright": "Copyright (c) 2015-2016 emsk",
     "mac": {
       "target": "dmg"
     },
