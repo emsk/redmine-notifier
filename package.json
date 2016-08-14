@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "node-notifier": "^4.6.0",
-    "notie": "3.9.1"
+    "notie": "3.9.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
