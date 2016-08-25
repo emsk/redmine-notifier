@@ -25,7 +25,8 @@
       height: 300,
       show: false,
       frame: false,
-      resizable: false
+      resizable: false,
+      maximizable: false
     });
 
     win.loadURL(`file://${__dirname}/index.html`);
