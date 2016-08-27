@@ -132,6 +132,7 @@ a {
 #delete-link {
   bottom: 35px;
   color: #fff;
+  cursor: pointer;
   font-size: 0.9em;
   position: absolute;
   right: 50px;
