@@ -120,6 +120,8 @@
         if (notifier.validateSettings()) {
           notifier.initFetch()
             .updateSettings();
+          this.updateNotifierCount();
+
           notie.alert('success', 'Settings have been saved.', NOTIE_DISPLAY_SEC);
         } else {
           notifier.readStoredSettings();
@@ -138,16 +140,38 @@
         notifier.testConnection(FETCH_MODE.TIME);
       });
 
+      document.getElementById('new-url-button').addEventListener('click', () => {
+        const lastNotifier = this._notifiers[this._notifiers.length - 1];
+        if (lastNotifier._settings.url === null) {
+          return;
+        }
+
+        this._currentNotifierIndex = this._notifiers.length;
+        this.addNotifier(this._currentNotifierIndex)
+          .displaySettings();
+      });
+
       document.getElementById('other-urls-button').addEventListener('click', () => {
         this.openURLMenu();
+
+        if (this._notifiers.length === 0) {
+          this.addNotifier(0);
+        }
       });
 
       document.getElementById('delete-link').addEventListener('click', () => {
         notie.confirm('Are you sure you want to delete this setting?', 'Yes', 'No', () => {
-          const notifier = this._notifiers[this._currentNotifierIndex];
-          notifier.deleteStoredSettings()
-            .readStoredSettings()
-            .displaySettings();
+          this.deleteCurrentNotifierSettings();
+          this.resetAllSettings();
+          this.updateNotifierCount();
+
+          // Display the first RedmineNotifier's settings
+          this._currentNotifierIndex = 0;
+          if (this._notifiers.length === 0) {
+            this.addNotifier(0);
+          }
+          this._notifiers[0].displaySettings();
+
           notie.alert('success', 'Settings have been deleted.', NOTIE_DISPLAY_SEC);
         });
       });
@@ -165,34 +189,84 @@
     }
 
     /**
+     * Update the stored count of RedmineNotifier objects.
+     * @param {number} count - Count of RedmineNotifier objects.
+     * @return {Object} Current object.
+     */
+    updateNotifierCount() {
+      localStorage.setItem('notifierCount', this._notifiers.length);
+      return this;
+    }
+
+    /**
+     * Add a RedmineNotifier object.
+     * @param {number} index - Index of the object.
+     * @return {Object} The RedmineNotifier object.
+     */
+    addNotifier(index) {
+      const notifier = new RedmineNotifier(index);
+      notifier.updateLastExecutionTime()
+        .readStoredSettings();
+      this._notifiers.push(notifier);
+      return notifier;
+    }
+
+    /**
      * Open the URL menu.
      * @return {Object} Current object.
      */
     openURLMenu() {
-      notie.select('Stored URLs', 'Cancel',
-        [
-          {
-            title: this._notifiers[0].getStoredSetting('url'),
-            color: '#628db6',
-            handler: () => {
-              this._currentNotifierIndex = 0;
-              const notifier = this._notifiers[this._currentNotifierIndex];
-              notifier.readStoredSettings()
-                .displaySettings();
-            }
-          },
-          {
-            title: this._notifiers[1].getStoredSetting('url'),
-            color: '#628db6',
-            handler: () => {
-              this._currentNotifierIndex = 1;
-              const notifier = this._notifiers[this._currentNotifierIndex];
-              notifier.readStoredSettings()
-                .displaySettings();
-            }
+      let choices = [];
+
+      // Remove invalid RedmineNotifier objects
+      this._notifiers = this._notifiers.filter((notifier) => {
+        return notifier._settings.url !== null;
+      });
+
+      this._notifiers.forEach((notifier, index) => {
+        choices.push({
+          title: notifier.getStoredSetting('url'),
+          color: '#628db6',
+          handler: () => {
+            this._currentNotifierIndex = index;
+            notifier.readStoredSettings()
+              .displaySettings();
           }
-        ]
-      );
+        });
+      });
+
+      notie.select('Stored URLs', 'Cancel', choices);
+
+      return this;
+    }
+
+    /**
+     * Delete the settings of current RedmineNotifier object.
+     * @return {Object} Current object.
+     */
+    deleteCurrentNotifierSettings() {
+      const notifier = this._notifiers[this._currentNotifierIndex];
+      notifier.deleteStoredSettings()
+        .readStoredSettings();
+      return this;
+    }
+
+    /**
+     * Reset all settings.
+     * @return {Object} Current object.
+     */
+    resetAllSettings() {
+      // Remove invalid RedmineNotifier objects
+      this._notifiers = this._notifiers.filter((notifier) => {
+        return notifier._settings.url !== null;
+      });
+
+      localStorage.clear();
+
+      this._notifiers.forEach((notifier, index) => {
+        notifier._index = index;
+        notifier.updateSettings();
+      });
 
       return this;
     }
@@ -556,25 +630,31 @@
 
     notie.setOptions({ colorInfo: '#3e5b76' });
 
-    const notifier1 = new RedmineNotifier(0);
-    notifier1.updateLastExecutionTime()
-      .readStoredSettings()
-      .displaySettings();
+    let notifiers = [];
+    const notifierCount = Number(localStorage.getItem('notifierCount'));
 
-    if (notifier1.validateSettings()) {
-      notifier1.initFetch();
+    for (let i = 0; i < notifierCount; i++) {
+      const notifier = new RedmineNotifier(i);
+      notifier.updateLastExecutionTime()
+        .readStoredSettings()
+        .displaySettings();
+
+      if (notifier.validateSettings()) {
+        notifier.initFetch();
+      }
+
+      notifiers.push(notifier);
     }
 
-    const notifier2 = new RedmineNotifier(1);
-    notifier2.updateLastExecutionTime()
-      .readStoredSettings();
-
-    if (notifier2.validateSettings()) {
-      notifier2.initFetch();
+    if (notifiers.length === 0) {
+      const notifier = new RedmineNotifier(0);
+      notifier.updateLastExecutionTime()
+        .readStoredSettings();
+      notifiers.push(notifier);
     }
 
     notifierScreen = new RedmineNotifierScreen();
-    notifierScreen.initNotifiers([notifier1, notifier2])
+    notifierScreen.initNotifiers(notifiers)
       .initMenu()
       .initEventListener()
       .displayDefaultSettings();
