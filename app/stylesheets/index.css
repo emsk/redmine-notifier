@@ -159,5 +159,5 @@ a {
 #notie-select-choices {
   font-size: 0.8em;
   max-height: 171px;
-  overflow: scroll;
+  overflow: auto;
 }
