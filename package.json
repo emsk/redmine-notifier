@@ -18,7 +18,7 @@
     "release": "npm run prepare && npm run pack"
   },
   "dependencies": {
-    "node-notifier": "^4.6.0",
+    "node-notifier": "^4.6.1",
     "notie": "3.9.2"
   },
   "devDependencies": {
