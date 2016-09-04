@@ -53,7 +53,11 @@
      */
     initNotifiers(notifiers) {
       this._notifiers = notifiers;
-      this._currentNotifierIndex = 0;
+      this._currentNotifierIndex = Number(localStorage.getItem('lastDisplayedNotifierIndex'));
+
+      const notifier = this._notifiers[this._currentNotifierIndex];
+      notifier.displaySettings();
+
       return this;
     }
 
@@ -95,6 +99,11 @@
         {
           label: 'Quit',
           click: () => {
+            const notifier = this._notifiers[this._currentNotifierIndex];
+            if (!notifier._newFlag) {
+              this.updateLastDisplayedNotifierIndex();
+            }
+
             remote.app.quit();
           }
         }
@@ -121,6 +130,11 @@
           notifier.initFetch()
             .updateSettings();
           this.updateNotifierCount();
+
+          if (notifier._newFlag) {
+            this.updateLastDisplayedNotifierIndex();
+            notifier.setNewFlag(false);
+          }
 
           notie.alert('success', 'Settings have been saved.', NOTIE_DISPLAY_SEC);
         } else {
@@ -167,6 +181,7 @@
 
           // Display the first RedmineNotifier's settings
           this._currentNotifierIndex = 0;
+          this.updateLastDisplayedNotifierIndex();
           if (this._notifiers.length === 0) {
             this.addNotifier(0);
           }
@@ -199,6 +214,15 @@
     }
 
     /**
+     * Update the stored index of last displayed RedmineNotifier object.
+     * @return {Object} Current object.
+     */
+    updateLastDisplayedNotifierIndex() {
+      localStorage.setItem('lastDisplayedNotifierIndex', this._currentNotifierIndex);
+      return this;
+    }
+
+    /**
      * Add a RedmineNotifier object.
      * @param {number} index - Index of the object.
      * @return {Object} The RedmineNotifier object.
@@ -206,7 +230,8 @@
     addNotifier(index) {
       const notifier = new RedmineNotifier(index);
       notifier.updateLastExecutionTime()
-        .readStoredSettings();
+        .readStoredSettings()
+        .setNewFlag(true);
       this._notifiers.push(notifier);
       return notifier;
     }
@@ -229,6 +254,7 @@
           color: '#628db6',
           handler: () => {
             this._currentNotifierIndex = index;
+            this.updateLastDisplayedNotifierIndex();
             notifier.readStoredSettings()
               .displaySettings();
           }
@@ -305,12 +331,23 @@
      * @param {number} index - Index of the object.
      */
     constructor(index) {
+      this._newFlag = false;
       this._index = index;
       this._lastExecutionTime = null;
       this._settings = null;
       this._fetchTimer = null;
       this._fetchMode = null;
       this._mostRecentIssueId = null;
+    }
+
+    /**
+     * Set flag of whether the object is new.
+     * @param {boolean} newFlag - true if the object is new.
+     * @return {Object} Current object.
+     */
+    setNewFlag(newFlag) {
+      this._newFlag = newFlag;
+      return this;
     }
 
     /**
@@ -636,8 +673,7 @@
     for (let i = 0; i < notifierCount; i++) {
       const notifier = new RedmineNotifier(i);
       notifier.updateLastExecutionTime()
-        .readStoredSettings()
-        .displaySettings();
+        .readStoredSettings();
 
       if (notifier.validateSettings()) {
         notifier.initFetch();
