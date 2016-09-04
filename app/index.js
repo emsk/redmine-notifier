@@ -205,7 +205,6 @@
 
     /**
      * Update the stored count of RedmineNotifier objects.
-     * @param {number} count - Count of RedmineNotifier objects.
      * @return {Object} Current object.
      */
     updateNotifierCount() {
