@@ -173,7 +173,7 @@
         }
       });
 
-      document.getElementById('delete-link').addEventListener('click', () => {
+      document.getElementById('delete-button').addEventListener('click', () => {
         notie.confirm('Are you sure you want to delete this setting?', 'Yes', 'No', () => {
           this.deleteCurrentNotifierSettings();
           this.resetAllSettings();
