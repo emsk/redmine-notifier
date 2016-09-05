@@ -178,14 +178,7 @@
           this.deleteCurrentNotifierSettings();
           this.resetAllSettings();
           this.updateNotifierCount();
-
-          // Display the first RedmineNotifier's settings
-          this._currentNotifierIndex = 0;
-          this.updateLastDisplayedNotifierIndex();
-          if (this._notifiers.length === 0) {
-            this.addNotifier(0);
-          }
-          this._notifiers[0].displaySettings();
+          this.displaySettingsAfterDelete();
 
           notie.alert('success', 'Settings have been deleted.', NOTIE_DISPLAY_SEC);
         });
@@ -292,6 +285,26 @@
         notifier._index = index;
         notifier.updateSettings();
       });
+
+      return this;
+    }
+
+    /**
+     * Display settings after deleting.
+     * @return {Object} Current object.
+     */
+    displaySettingsAfterDelete() {
+      if (this._notifiers.length === 0) {
+        // Display the first settings
+        this._currentNotifierIndex = 0;
+        this.addNotifier(this._currentNotifierIndex);
+      } else if (this._notifiers[this._currentNotifierIndex] === undefined) {
+        // Display the previous settings
+        this._currentNotifierIndex = this._currentNotifierIndex - 1;
+      }
+
+      const notifier = this._notifiers[this._currentNotifierIndex];
+      notifier.displaySettings();
 
       return this;
     }
