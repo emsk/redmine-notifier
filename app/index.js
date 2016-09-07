@@ -175,10 +175,10 @@
 
       document.getElementById('delete-button').addEventListener('click', () => {
         notie.confirm('Are you sure you want to delete this setting?', 'Yes', 'No', () => {
-          this.deleteCurrentNotifierSettings();
-          this.resetAllSettings();
-          this.updateNotifierCount();
-          this.displaySettingsAfterDelete();
+          this.deleteCurrentNotifierSettings()
+            .resetAllSettings()
+            .updateNotifierCount()
+            .displaySettingsAfterDelete();
 
           notie.alert('success', 'Settings have been deleted.', NOTIE_DISPLAY_SEC);
         });
