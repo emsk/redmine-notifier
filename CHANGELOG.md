@@ -1,5 +1,30 @@
 # Change Log 
 
+## 0.7.0 (2016-09-10)
+
+### Production
+
+* Enable to store a lot of settings
+* Change timing of clearing sub notification
+* Update animated GIF of Windows installer
+* Fix whitespace in the settings window title
+* Fix redundant save message
+* Change CSS properties in alphabetical order
+* Update to Electron 1.3.5
+* Update notie dependency to 3.9.4
+* Update node-notifier dependency to ^4.6.1
+
+### Development
+
+* Add version to suffix of installer filename
+* Update electron-prebuilt dependency to 1.3.5
+* Update electron-builder dependency to ~6.6.1
+* Update spectron dependency to ~3.3.0
+* Update mocha dependency to ^3.0.2
+* Update eslint dependency to ^3.5.0
+* Update csslint dependency to ^1.0.2
+* Update textlint dependency to ^7.1.1
+
 ## 0.6.0 (2016-07-10)
 
 ### Production
