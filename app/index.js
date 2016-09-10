@@ -670,12 +670,7 @@
   }
 
   window.addEventListener('load', () => {
-    // Delete settings of Redmine Notifier <= 0.6.0
-    localStorage.removeItem('url');
-    localStorage.removeItem('apiKey');
-    localStorage.removeItem('projectId');
-    localStorage.removeItem('fetchIntervalSec');
-    localStorage.removeItem('lastExecutionTime');
+    migrateOldSettings();
 
     notie.setOptions({ colorInfo: '#3e5b76' });
 
@@ -707,5 +702,57 @@
       .initEventListener()
       .displayDefaultSettings();
   });
+
+  /**
+   * Migrate the settings of Redmine Notifier 0.5.0 or 0.6.0.
+   * @return {boolean} true if old settings are migrated.
+   */
+  const migrateOldSettings = () => {
+    const oldSettings = {
+      url: localStorage.getItem('url'),
+      apiKey: localStorage.getItem('apiKey'),
+      projectId: localStorage.getItem('projectId'),
+      fetchIntervalSec: localStorage.getItem('fetchIntervalSec'),
+      lastExecutionTime: localStorage.getItem('lastExecutionTime')
+    };
+
+    if (!hasOldSettings(oldSettings)) {
+      return false;
+    }
+
+    // Copy to index 0
+    const notifier = new RedmineNotifier(0);
+    delete oldSettings.lastExecutionTime; // Strictly speaking, `lastExecutionTime` is not a setting
+    notifier._settings = oldSettings;
+    notifier.updateSettings();
+    notifier.updateLastExecutionTime();
+
+    localStorage.setItem('notifierCount', 1);
+    localStorage.setItem('lastDisplayedNotifierIndex', 0);
+
+    // Delete old settings
+    localStorage.removeItem('url');
+    localStorage.removeItem('apiKey');
+    localStorage.removeItem('projectId');
+    localStorage.removeItem('fetchIntervalSec');
+    localStorage.removeItem('lastExecutionTime');
+
+    return true;
+  };
+
+  /**
+   * Check whether old settings exist.
+   * @param {Object} oldSettings - Old settings.
+   * @return {boolean} true if old settings exist.
+   */
+  const hasOldSettings = (oldSettings) => {
+    for (let key in oldSettings) {
+      if (oldSettings.hasOwnProperty(key) && oldSettings[key] !== null) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 })();
 
