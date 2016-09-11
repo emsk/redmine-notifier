@@ -1,6 +1,6 @@
 {
   "name": "redmine-notifier",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "scripts": {
     "start": "electron ./app/main.js",
     "prepare": "./bin/prepare.sh",

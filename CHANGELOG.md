@@ -1,5 +1,11 @@
 # Change Log 
 
+## 0.7.1 (2016-09-11)
+
+### Production
+
+* Fix errors that occur when a new entry form is added
+
 ## 0.7.0 (2016-09-10)
 
 ### Production
