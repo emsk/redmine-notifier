@@ -229,18 +229,24 @@
     }
 
     /**
+     * Select valid RedmineNotifier objects.
+     * @return {RedmineNotifier[]} Valid RedmineNotifier objects.
+     */
+    selectValidNotifiers() {
+      return this._notifiers.filter((notifier) => {
+        return notifier._settings.url !== null;
+      });
+    }
+
+    /**
      * Open the URL menu.
      * @return {Object} Current object.
      */
     openURLMenu() {
       let choices = [];
 
-      // Remove invalid RedmineNotifier objects
-      this._notifiers = this._notifiers.filter((notifier) => {
-        return notifier._settings.url !== null;
-      });
-
-      this._notifiers.forEach((notifier, index) => {
+      const notifiers = this.selectValidNotifiers();
+      notifiers.forEach((notifier, index) => {
         choices.push({
           title: notifier.getStoredSetting('url'),
           color: '#628db6',
@@ -249,6 +255,8 @@
             this.updateLastDisplayedNotifierIndex();
             notifier.readStoredSettings()
               .displaySettings();
+
+            this._notifiers = this.selectValidNotifiers();
           }
         });
       });
@@ -274,10 +282,7 @@
      * @return {Object} Current object.
      */
     resetAllSettings() {
-      // Remove invalid RedmineNotifier objects
-      this._notifiers = this._notifiers.filter((notifier) => {
-        return notifier._settings.url !== null;
-      });
+      this._notifiers = this.selectValidNotifiers();
 
       localStorage.clear();
 
