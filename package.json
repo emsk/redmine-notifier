@@ -40,7 +40,7 @@
       "unpack": "**/app/{node_modules/node-notifier/vendor,images}/**"
     },
     "files": ["**/*", "!**/npm-debug\\.log", "!etc"],
-    "copyright": "Copyright (c) 2015-2016 emsk",
+    "copyright": "Copyright (c) 2015-2017 emsk",
     "mac": {
       "target": "dmg"
     },
