@@ -9,9 +9,11 @@
 Redmine Notifier is a simple updated issues checker that runs in the background.
 It sends a desktop notification if there are any updates in issues.
 
-## Downloads
+## Installation
 
 Installers for OS X and Windows can be found on the [releases](../../releases) page.
+
+For Windows, the app is installed to `C:\Users\[UserName]\AppData\Local\redmine\app-[AppVersion]\Redmine Notifier.exe`.
 
 ## Main Notifications
 
