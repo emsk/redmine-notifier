@@ -11,12 +11,25 @@
 
   const electron = require('electron');
   const remote = electron.remote;
+  const app = remote.app;
+  const dialog = remote.dialog;
   const shell = remote.shell;
   const Menu = remote.Menu;
   const Tray = remote.Tray;
   const fs = require('fs');
   const notie = require('notie');
   const nodeNotifier = require('node-notifier');
+
+  const appName = app.getName();
+  const appCopyright = 'Copyright (c) 2015-2017 emsk';
+
+  let appDir = `${__dirname}.unpacked`; // Production
+  try {
+    fs.statSync(appDir);
+  } catch(e) {
+    appDir = __dirname; // Development
+  }
+  const appIconFilePath = `${appDir}/images/${COLOR_ICON_FILENAME_64}`;
 
   const FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
 
@@ -80,6 +93,25 @@
         }
       ]);
 
+      let aboutMenuItem;
+      if (process.platform === 'darwin') {
+        aboutMenuItem = { role: 'about' };
+      } else {
+        aboutMenuItem = {
+          role: 'help',
+          label: `About ${appName}`,
+          click: () => {
+            dialog.showMessageBox({
+              title: `About ${appName}`,
+              message: `${appName} ${app.getVersion()}`,
+              detail: appCopyright,
+              icon: appIconFilePath,
+              buttons: []
+            });
+          }
+        };
+      }
+
       this._contextMenu = Menu.buildFromTemplate([
         {
           label: 'Open Most Recent Issue in Browser',
@@ -95,6 +127,13 @@
           click: () => {
             remote.getCurrentWindow().show();
           }
+        },
+        {
+          type: 'separator'
+        },
+        aboutMenuItem,
+        {
+          type: 'separator'
         },
         {
           label: 'Quit',
@@ -640,13 +679,6 @@
 
       if (issueCount === 0) return this;
 
-      let appDir = `${__dirname}.unpacked`; // Production
-      try {
-        fs.statSync(appDir);
-      } catch(e) {
-        appDir = __dirname; // Development
-      }
-
       this._mostRecentIssueId = issues[0].id;
       notifierScreen.setNotificationIcon(this._index);
 
@@ -654,7 +686,7 @@
       nodeNotifier.notify({
         title: `(${issueCount}) Redmine Notifier`,
         message: issues[0].subject,
-        icon: `${appDir}/images/${COLOR_ICON_FILENAME_64}`,
+        icon: appIconFilePath,
         wait: true
       });
 
