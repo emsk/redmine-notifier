@@ -1,13 +1,13 @@
 'use strict';
 
 (() => {
-  const DEFAULT_FETCH_INTERVAL_SEC = 600;
-  const NOTIE_DISPLAY_SEC = 1.5;
-  const COLOR_ICON_FILENAME_64 = 'redmine_icon_color_64.png';
-  const BLACK_ICON_FILENAME_24 = 'redmine_icon_black_24.png';
-  const BLACK_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_black_24_notification.png';
-  const COLOR_ICON_FILENAME_24 = 'redmine_icon_color_24.png';
-  const COLOR_ICON_FILENAME_24_NOTIFICATION = 'redmine_icon_color_24_notification.png';
+  const defaultFetchIntervalSec = 600;
+  const notieDisplaySec = 1.5;
+  const colorIconFilename64 = 'redmine_icon_color_64.png';
+  const blackIconFilename24 = 'redmine_icon_black_24.png';
+  const blackIconFilename24Notification = 'redmine_icon_black_24_notification.png';
+  const colorIconFilename24 = 'redmine_icon_color_24.png';
+  const colorIconFilename24Notification = 'redmine_icon_color_24_notification.png';
 
   const electron = require('electron');
   const remote = electron.remote;
@@ -29,9 +29,9 @@
   } catch(e) {
     appDir = __dirname; // Development
   }
-  const appIconFilePath = `${appDir}/images/${COLOR_ICON_FILENAME_64}`;
+  const appIconFilePath = `${appDir}/images/${colorIconFilename64}`;
 
-  const FETCH_MODE = Object.freeze({ TIME: 'TIME', DATE: 'DATE' });
+  const fetchMode = Object.freeze({ time: 'TIME', date: 'DATE' });
 
   let notifierScreen = null;
 
@@ -51,11 +51,11 @@
       this._mostRecentNotifierIndex = null;
 
       if (process.platform === 'darwin') {
-        this._iconFilePath             = `${__dirname}/images/${BLACK_ICON_FILENAME_24}`;
-        this._notificationIconFilePath = `${__dirname}/images/${BLACK_ICON_FILENAME_24_NOTIFICATION}`;
+        this._iconFilePath             = `${__dirname}/images/${blackIconFilename24}`;
+        this._notificationIconFilePath = `${__dirname}/images/${blackIconFilename24Notification}`;
       } else {
-        this._iconFilePath             = `${__dirname}/images/${COLOR_ICON_FILENAME_24}`;
-        this._notificationIconFilePath = `${__dirname}/images/${COLOR_ICON_FILENAME_24_NOTIFICATION}`;
+        this._iconFilePath             = `${__dirname}/images/${colorIconFilename24}`;
+        this._notificationIconFilePath = `${__dirname}/images/${colorIconFilename24Notification}`;
       }
     }
 
@@ -175,7 +175,7 @@
             notifier.setNewFlag(false);
           }
 
-          notie.alert('success', 'Settings have been saved.', NOTIE_DISPLAY_SEC);
+          notie.alert('success', 'Settings have been saved.', notieDisplaySec);
         } else {
           notifier.readStoredSettings();
         }
@@ -190,7 +190,7 @@
 
       document.getElementById('test-connection-button').addEventListener('click', () => {
         const notifier = this._notifiers[this._currentNotifierIndex];
-        notifier.testConnection(FETCH_MODE.TIME);
+        notifier.testConnection(fetchMode.time);
       });
 
       document.getElementById('new-url-button').addEventListener('click', () => {
@@ -219,7 +219,7 @@
             .updateNotifierCount()
             .displaySettingsAfterDelete();
 
-          notie.alert('success', 'Settings have been deleted.', NOTIE_DISPLAY_SEC);
+          notie.alert('success', 'Settings have been deleted.', notieDisplaySec);
         });
       });
 
@@ -231,7 +231,7 @@
      * @return {Object} Current object.
      */
     displayDefaultSettings() {
-      document.getElementById('default-fetch-interval-sec').innerHTML = DEFAULT_FETCH_INTERVAL_SEC;
+      document.getElementById('default-fetch-interval-sec').innerHTML = defaultFetchIntervalSec;
       return this;
     }
 
@@ -506,7 +506,7 @@
       if (this._settings.url && this._settings.apiKey) {
         return true;
       } else {
-        notie.alert('error', 'Please enter required fields.', NOTIE_DISPLAY_SEC);
+        notie.alert('error', 'Please enter required fields.', notieDisplaySec);
         return false;
       }
     }
@@ -516,12 +516,12 @@
      * @return {Object} Current object.
      */
     initFetch() {
-      const intervalMsec = 1000 * (this._settings.fetchIntervalSec || DEFAULT_FETCH_INTERVAL_SEC);
+      const intervalMsec = 1000 * (this._settings.fetchIntervalSec || defaultFetchIntervalSec);
 
       clearInterval(this._fetchTimer);
 
       this._fetchTimer = setInterval(() => {
-        this.fetch(this._fetchMode || FETCH_MODE.TIME);
+        this.fetch(this._fetchMode || fetchMode.time);
       }, intervalMsec);
 
       return this;
@@ -556,14 +556,14 @@
      * @return {Object} Current object.
      */
     handleResponseFetch(mode, status, responseText) {
-      if (mode === FETCH_MODE.TIME) {
+      if (mode === fetchMode.time) {
         if (status === 200) {
           this.notify(JSON.parse(responseText).issues)
             .updateLastExecutionTime();
         } else if (status === 422) {
           // Retry with date mode if Redmine API doesn't accept time format
-          this._fetchMode = FETCH_MODE.DATE;
-          this.fetch(FETCH_MODE.DATE);
+          this._fetchMode = fetchMode.date;
+          this.fetch(fetchMode.date);
         }
       } else {
         if (status === 200) {
@@ -622,17 +622,17 @@
      */
     handleResponseTestConnection(mode, status) {
       if (status === 200) {
-        notie.alert('success', 'Connection succeeded.', NOTIE_DISPLAY_SEC);
+        notie.alert('success', 'Connection succeeded.', notieDisplaySec);
         return this;
       }
 
       // Retry with date mode if Redmine API doesn't accept time format
-      if (mode === FETCH_MODE.TIME && status === 422) {
-        this.testConnection(FETCH_MODE.DATE);
+      if (mode === fetchMode.time && status === 422) {
+        this.testConnection(fetchMode.date);
         return this;
       }
 
-      notie.alert('error', 'Connection failed.', NOTIE_DISPLAY_SEC);
+      notie.alert('error', 'Connection failed.', notieDisplaySec);
 
       return this;
     }
@@ -662,7 +662,7 @@
      * @return {string} Last execution time.
      */
     getLastExecutionTime(mode) {
-      if (mode === FETCH_MODE.TIME) {
+      if (mode === fetchMode.time) {
         return this._lastExecutionTime;
       } else {
         return this._lastExecutionTime.replace(/T.*/, ''); // Date
