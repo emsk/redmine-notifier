@@ -98,7 +98,6 @@
         aboutMenuItem = { role: 'about' };
       } else {
         aboutMenuItem = {
-          role: 'help',
           label: `About ${appName}`,
           click: () => {
             dialog.showMessageBox({
