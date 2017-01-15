@@ -12,6 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "node-notifier": "^4.6.1",
-    "notie": "3.9.4"
+    "notie": "3.9.5"
   }
 }
