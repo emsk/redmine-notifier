@@ -116,6 +116,10 @@ See `scripts` in [`package.json`](package.json) with regard to other commands.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
+## Related
+
+* [Redmine Now](https://github.com/emsk/redmine-now) - A desktop app to know what's happening now on your Redmine
+
 ## License
 
 [MIT](LICENSE)
