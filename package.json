@@ -3,7 +3,7 @@
   "version": "0.7.1",
   "scripts": {
     "start": "electron ./app/main.js",
-    "prepare": "./bin/prepare.sh",
+    "setup": "./bin/setup.sh",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:text",
     "lint:js": "./bin/lint-js.sh",
     "lint:css": "./bin/lint-css.sh",
@@ -15,7 +15,7 @@
     "pack:mac": "./bin/pack-mac.sh",
     "pack:win": "./bin/pack-win.sh",
     "test": "./bin/test.sh",
-    "release": "npm run prepare && npm run pack"
+    "release": "npm run setup && npm run pack"
   },
   "dependencies": {
     "node-notifier": "^4.6.1",
