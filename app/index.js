@@ -645,6 +645,7 @@
     getRequestParams(mode, projectId) {
       const params = [
         `updated_on=%3E%3D${this.getLastExecutionTime(mode)}`,
+        'status_id=*',
         'sort=updated_on:desc'
       ];
 
