@@ -3,6 +3,7 @@
   "version": "0.7.1",
   "scripts": {
     "start": "electron ./app/main.js",
+    "clean": "./bin/clean.sh",
     "postinstall": "install-app-deps",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:text",
     "lint:js": "./bin/lint-js.sh",
@@ -12,7 +13,7 @@
     "pack:mac": "./bin/pack-mac.sh",
     "pack:win": "./bin/pack-win.sh",
     "test": "./bin/test.sh",
-    "release": "npm install && npm run pack"
+    "release": "npm run clean && npm install && npm run pack"
   },
   "dependencies": {
     "node-notifier": "^4.6.1",
