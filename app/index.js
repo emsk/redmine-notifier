@@ -20,6 +20,8 @@
   const notie = require('notie');
   const nodeNotifier = require('node-notifier');
 
+  const isMac = process.platform === 'darwin';
+
   const appName = app.getName();
   const appCopyright = 'Copyright (c) 2015-2017 emsk';
 
@@ -50,7 +52,7 @@
       this._contextMenu = null;
       this._mostRecentNotifierIndex = null;
 
-      if (process.platform === 'darwin') {
+      if (isMac) {
         this._iconFilePath             = `${__dirname}/images/${blackIconFilename24}`;
         this._notificationIconFilePath = `${__dirname}/images/${blackIconFilename24Notification}`;
       } else {
@@ -94,7 +96,7 @@
       ]);
 
       let aboutMenuItem;
-      if (process.platform === 'darwin') {
+      if (isMac) {
         aboutMenuItem = { role: 'about' };
       } else {
         aboutMenuItem = {

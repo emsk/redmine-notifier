@@ -4,10 +4,13 @@
   const electron = require('electron');
   const app = electron.app;
   const BrowserWindow = electron.BrowserWindow;
+
+  const isMac = process.platform === 'darwin';
+
   let win = null;
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    if (!isMac) {
       app.quit();
     }
   });
@@ -16,7 +19,7 @@
   app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
   app.on('ready', () => {
-    if (process.platform === 'darwin') {
+    if (isMac) {
       app.dock.hide();
     }
 
