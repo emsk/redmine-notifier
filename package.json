@@ -25,7 +25,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "electron": "1.4.15",
-    "electron-builder": "~7.0.0",
+    "electron-builder": "~8.0.0",
     "eslint": "~3.13.1",
     "mocha": "^3.2.0",
     "spectron": "~3.4.0",
@@ -46,11 +46,14 @@
       "target": "dmg"
     },
     "dmg": {
-      "icon-size": 120,
+      "iconSize": 120,
       "contents": [
-        { "x": 370, "y": 300, "type": "link", "path": "/Applications" },
-        { "x": 130, "y": 300, "type": "file" }
+        { "x": 130, "y": 300, "type": "file" },
+        { "x": 370, "y": 300, "type": "link", "path": "/Applications" }
       ]
+    },
+    "win": {
+      "target": "squirrel"
     }
   }
 }
