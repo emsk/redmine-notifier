@@ -25,7 +25,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "electron": "1.4.15",
-    "electron-builder": "~8.0.0",
+    "electron-builder": "~10.0.0",
     "eslint": "~3.13.1",
     "mocha": "^3.2.0",
     "spectron": "~3.4.0",
@@ -37,9 +37,7 @@
   "build": {
     "appId": "redmine-notifier",
     "category": "public.app-category.productivity",
-    "asar": {
-      "unpack": "**/app/{node_modules/node-notifier/vendor,images}/**"
-    },
+    "asarUnpack": "images/*",
     "files": ["**/*", "!**/npm-debug\\.log", "!etc"],
     "copyright": "Copyright (c) 2015-2017 emsk",
     "mac": {
