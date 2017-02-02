@@ -557,7 +557,8 @@
     handleResponseFetch(mode, status, responseText) {
       if (mode === fetchMode.time) {
         if (status === 200) {
-          this.notify(JSON.parse(responseText).issues)
+          const response = JSON.parse(responseText);
+          this.notify(response.issues, this.isOverPage(response))
             .updateLastExecutionTime();
         } else if (status === 422) {
           // Retry with date mode if Redmine API doesn't accept time format
@@ -566,13 +567,23 @@
         }
       } else {
         if (status === 200) {
-          this.notify(this.pickIssues(JSON.parse(responseText).issues));
+          const response = JSON.parse(responseText);
+          this.notify(this.pickIssues(response.issues), this.isOverPage(response));
         }
 
         this.updateLastExecutionTime();
       }
 
       return this;
+    }
+
+    /**
+     * Check whether issues over 1 page.
+     * @param {Object} response - Response.
+     * @return {boolean} true if over 1 page.
+     */
+    isOverPage(response) {
+      return response.total_count > response.limit;
     }
 
     /**
@@ -646,7 +657,8 @@
       const params = [
         `updated_on=%3E%3D${this.getLastExecutionTime(mode)}`,
         'status_id=*',
-        'sort=updated_on:desc'
+        'sort=updated_on:desc',
+        'limit=100'
       ];
 
       if (typeof projectId === 'string' && projectId !== '') {
@@ -672,9 +684,10 @@
     /**
      * Send the desktop notification.
      * @param {Object} issues - All of updated issues.
+     * @param {boolean} isOverPage - true if over 1 page.
      * @return {Object} Current object.
      */
-    notify(issues) {
+    notify(issues, isOverPage) {
       const issueCount = issues.length;
 
       if (issueCount === 0) return this;
@@ -684,7 +697,7 @@
 
       // Display the latest issue's subject only
       nodeNotifier.notify({
-        title: `(${issueCount}) Redmine Notifier`,
+        title: this.buildNotificationTitle(issueCount, isOverPage),
         message: issues[0].subject,
         icon: appIconFilePath,
         wait: true
@@ -703,6 +716,22 @@
       });
 
       return this;
+    }
+
+    /**
+     * Build a notification title.
+     * @param {number} issueCount - Count of issues.
+     * @param {boolean} isOverPage - true if over 1 page.
+     * @return {string} Notification title.
+     */
+    buildNotificationTitle(issueCount, isOverPage) {
+      let title = `(${issueCount}`;
+      if (isOverPage) {
+        title += '+';
+      }
+      title += ') Redmine Notifier';
+
+      return title;
     }
   }
 
