@@ -83,12 +83,6 @@ npm run prepare
 npm start
 ```
 
-### Building apps
-
-```sh
-npm run build
-```
-
 ### Building installers
 
 ```sh
