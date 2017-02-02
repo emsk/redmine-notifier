@@ -59,6 +59,10 @@ input::-webkit-outer-spin-button {
   margin: 0;
 }
 
+input:focus {
+  box-shadow: 0 0 0 1px #ccc;
+}
+
 button {
   -webkit-app-region: no-drag;
   background-color: #628db6;
@@ -71,6 +75,7 @@ button {
   padding: 8px 20px;
 }
 
+input:focus,
 button:focus {
   outline: none;
 }
