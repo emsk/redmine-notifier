@@ -58,8 +58,8 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 
 * [chai](https://github.com/chaijs/chai)
 * [chai-as-promised](https://github.com/domenic/chai-as-promised)
+* [electron](https://github.com/electron/electron)
 * [electron-builder](https://github.com/electron-userland/electron-builder)
-* [electron-prebuilt](https://github.com/electron-userland/electron-prebuilt)
 * [eslint](https://github.com/eslint/eslint)
 * [mocha](https://github.com/mochajs/mocha)
 * [spectron](https://github.com/electron/spectron)
