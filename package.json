@@ -15,10 +15,6 @@
     "test": "./bin/test.sh",
     "release": "npm run clean && npm install && npm run pack"
   },
-  "dependencies": {
-    "node-notifier": "^4.6.1",
-    "notie": "3.9.5"
-  },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
