@@ -74,31 +74,31 @@ See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
 ```sh
 cd /path/to/redmine-notifier
-npm install
+yarn install
 ```
 
 ### Starting app
 
 ```sh
-npm start
+yarn start
 ```
 
 ### Building installers
 
 ```sh
-npm run pack
+yarn run pack
 ```
 
 ### Linting JavaScript, CSS, and Markdown files
 
 ```sh
-npm run lint
+yarn run lint
 ```
 
 ### Testing app
 
 ```sh
-npm test
+yarn test
 ```
 
 See `scripts` in [`package.json`](package.json) with regard to other commands.

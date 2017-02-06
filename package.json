@@ -5,7 +5,7 @@
     "start": "electron ./app/main.js",
     "clean": "./bin/clean.sh",
     "postinstall": "install-app-deps",
-    "lint": "npm run lint:js && npm run lint:css && npm run lint:text",
+    "lint": "yarn run lint:js && yarn run lint:css && yarn run lint:text",
     "lint:js": "./bin/lint-js.sh",
     "lint:css": "./bin/lint-css.sh",
     "lint:text": "./bin/lint-text.sh",
@@ -13,7 +13,7 @@
     "pack:mac": "./bin/pack-mac.sh",
     "pack:win": "./bin/pack-win.sh",
     "test": "./bin/test.sh",
-    "release": "npm run clean && npm install && npm run pack"
+    "release": "yarn run clean && yarn install && yarn run pack"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -33,7 +33,6 @@
     "appId": "redmine-notifier",
     "category": "public.app-category.productivity",
     "asarUnpack": "images/*",
-    "files": ["**/*", "!**/npm-debug\\.log"],
     "copyright": "Copyright (c) 2015-2017 emsk",
     "mac": {
       "target": "dmg"

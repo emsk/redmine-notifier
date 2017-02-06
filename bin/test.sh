@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cd $(dirname $0)/..
 if [ ! -e './dist/mac/Redmine Notifier.app' ]; then
-  $(npm bin)/build --mac --x64
+  $(yarn bin)/build --mac --x64
 fi
-$(npm bin)/mocha
+$(yarn bin)/mocha
