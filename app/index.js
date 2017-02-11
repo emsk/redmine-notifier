@@ -28,14 +28,373 @@
   let appDir = `${__dirname}.unpacked`; // Production
   try {
     fs.statSync(appDir);
-  } catch(e) {
+  } catch (err) {
     appDir = __dirname; // Development
   }
   const appIconFilePath = `${appDir}/images/${colorIconFilename64}`;
 
-  const fetchMode = Object.freeze({ time: 'TIME', date: 'DATE' });
+  const fetchMode = Object.freeze({time: 'TIME', date: 'DATE'});
 
   let notifierScreen = null;
+
+  /**
+   * Class to check updated issues.
+   */
+  class RedmineNotifier {
+    /**
+     * Initialize the RedmineNotifier object.
+     * @constructor
+     * @param {number} index - Index of the object.
+     */
+    constructor(index) {
+      this._newFlag = false;
+      this._index = index;
+      this._lastExecutionTime = null;
+      this._settings = null;
+      this._fetchTimer = null;
+      this._fetchMode = null;
+      this._mostRecentIssueId = null;
+    }
+
+    /**
+     * Set flag of whether the object is new.
+     * @param {boolean} newFlag - true if the object is new.
+     * @return {Object} Current object.
+     */
+    setNewFlag(newFlag) {
+      this._newFlag = newFlag;
+      return this;
+    }
+
+    /**
+     * Display the settings on the screen.
+     * @return {Object} Current object.
+     */
+    displaySettings() {
+      document.getElementById('url').value = this._settings.url;
+      document.getElementById('api-key').value = this._settings.apiKey;
+      document.getElementById('project-id').value = this._settings.projectId;
+      document.getElementById('fetch-interval-sec').value = this._settings.fetchIntervalSec;
+      return this;
+    }
+
+    /**
+     * Get the settings from the screen.
+     * @return {Object} Settings.
+     */
+    getPageSettings() {
+      return {
+        url: document.getElementById('url').value,
+        apiKey: document.getElementById('api-key').value,
+        projectId: document.getElementById('project-id').value,
+        fetchIntervalSec: document.getElementById('fetch-interval-sec').value
+      };
+    }
+
+    /**
+     * Read the settings from the screen.
+     * @return {Object} Current object.
+     */
+    readScreenSettings() {
+      this._settings = this.getPageSettings();
+      return this;
+    }
+
+    /**
+     * Read the settings from the localStorage.
+     * @return {Object} Current object.
+     */
+    readStoredSettings() {
+      this._settings = {
+        url: localStorage.getItem(`url${this._index}`),
+        apiKey: localStorage.getItem(`apiKey${this._index}`),
+        projectId: localStorage.getItem(`projectId${this._index}`),
+        fetchIntervalSec: localStorage.getItem(`fetchIntervalSec${this._index}`)
+      };
+
+      return this;
+    }
+
+    /**
+     * Get the setting from the localStorage.
+     * @param {string} key - Setting key.
+     * @return {string} Setting value.
+     */
+    getStoredSetting(key) {
+      return localStorage.getItem(`${key}${this._index}`);
+    }
+
+    /**
+     * Update the stored last execution time.
+     * @return {Object} Current object.
+     */
+    updateLastExecutionTime() {
+      this._lastExecutionTime = (new Date()).toISOString().replace(/\.\d+Z$/, 'Z');
+      localStorage.setItem(`lastExecutionTime${this._index}`, this._lastExecutionTime);
+      return this;
+    }
+
+    /**
+     * Update the stored settings.
+     * @return {Object} Current object.
+     */
+    updateSettings() {
+      localStorage.setItem(`url${this._index}`, this._settings.url);
+      localStorage.setItem(`apiKey${this._index}`, this._settings.apiKey);
+      localStorage.setItem(`projectId${this._index}`, this._settings.projectId);
+      localStorage.setItem(`fetchIntervalSec${this._index}`, this._settings.fetchIntervalSec);
+      return this;
+    }
+
+    /**
+     * Delete the settings.
+     * @return {Object} Current object.
+     */
+    deleteStoredSettings() {
+      localStorage.removeItem(`url${this._index}`);
+      localStorage.removeItem(`apiKey${this._index}`);
+      localStorage.removeItem(`projectId${this._index}`);
+      localStorage.removeItem(`fetchIntervalSec${this._index}`);
+      return this;
+    }
+
+    /**
+     * Validate the settings.
+     * @return {boolean} true if valid.
+     */
+    validateSettings() {
+      if (this._settings.url && this._settings.apiKey) {
+        return true;
+      }
+      notie.alert('error', 'Please enter required fields.', notieDisplaySec);
+      return false;
+    }
+
+    /**
+     * Initialize the fetch function.
+     * @return {Object} Current object.
+     */
+    initFetch() {
+      const intervalMsec = 1000 * (this._settings.fetchIntervalSec || defaultFetchIntervalSec);
+
+      clearInterval(this._fetchTimer);
+
+      this._fetchTimer = setInterval(() => {
+        this.fetch(this._fetchMode || fetchMode.time);
+      }, intervalMsec);
+
+      return this;
+    }
+
+    /**
+     * Fetch updated issues by using Redmine REST API.
+     * @param {string} mode - Time or date.
+     * @return {Object} Current object.
+     */
+    fetch(mode) {
+      const xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          this.handleResponseFetch(mode, xhr.status, xhr.responseText);
+        }
+      };
+
+      xhr.open('GET', `${this._settings.url}/issues.json${this.getRequestParams(mode, this._settings.projectId)}`);
+      xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
+      xhr.send();
+
+      return this;
+    }
+
+    /**
+     * Handle the response for the fetch.
+     * @param {string} mode - Time or date.
+     * @param {number} status - Response status.
+     * @param {string} responseText - Response text.
+     * @return {Object} Current object.
+     */
+    handleResponseFetch(mode, status, responseText) {
+      if (mode === fetchMode.time) {
+        if (status === 200) {
+          const response = JSON.parse(responseText);
+          this.notify(response.issues, this.isOverPage(response))
+            .updateLastExecutionTime();
+        } else if (status === 422) {
+          // Retry with date mode if Redmine API doesn't accept time format
+          this._fetchMode = fetchMode.date;
+          this.fetch(fetchMode.date);
+        }
+      } else {
+        if (status === 200) {
+          const response = JSON.parse(responseText);
+          this.notify(this.pickIssues(response.issues), this.isOverPage(response));
+        }
+
+        this.updateLastExecutionTime();
+      }
+
+      return this;
+    }
+
+    /**
+     * Check whether issues over 1 page.
+     * @param {Object} response - Response.
+     * @return {boolean} true if over 1 page.
+     */
+    isOverPage(response) {
+      return response.total_count > response.limit;
+    }
+
+    /**
+     * Get issues which were updated after last execution time.
+     * @param {string} responseIssues - Response issues.
+     * @return {Object[]} Processed issues.
+     */
+    pickIssues(responseIssues) {
+      const lastExecutionTime = new Date(this._lastExecutionTime).getTime();
+
+      const issues = responseIssues.filter(issue => {
+        const updatedTime = new Date(issue.updated_on).getTime();
+        return updatedTime >= lastExecutionTime;
+      });
+
+      return issues;
+    }
+
+    /**
+     * Test the connection to the Redmine.
+     * @param {string} mode - Time or date.
+     * @return {Object} Current object.
+     */
+    testConnection(mode) {
+      const xhr = new XMLHttpRequest();
+      const pageSettings = this.getPageSettings();
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          this.handleResponseTestConnection(mode, xhr.status);
+        }
+      };
+
+      xhr.open('GET', `${pageSettings.url}/issues.json${this.getRequestParams(mode, pageSettings.projectId)}`);
+      xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
+      xhr.send();
+
+      return this;
+    }
+
+    /**
+     * Handle the response for the test connection.
+     * @param {string} mode - Time or date.
+     * @param {number} status - Response status.
+     * @return {Object} Current object.
+     */
+    handleResponseTestConnection(mode, status) {
+      if (status === 200) {
+        notie.alert('success', 'Connection succeeded.', notieDisplaySec);
+        return this;
+      }
+
+      // Retry with date mode if Redmine API doesn't accept time format
+      if (mode === fetchMode.time && status === 422) {
+        this.testConnection(fetchMode.date);
+        return this;
+      }
+
+      notie.alert('error', 'Connection failed.', notieDisplaySec);
+
+      return this;
+    }
+
+    /**
+     * Get the request parameters.
+     * @param {string} mode - Time or date.
+     * @param {string} projectId - Project ID (a numeric value, not a project identifier).
+     * @return {string} Request parameters.
+     */
+    getRequestParams(mode, projectId) {
+      const params = [
+        `updated_on=%3E%3D${this.getLastExecutionTime(mode)}`,
+        'status_id=*',
+        'sort=updated_on:desc',
+        'limit=100'
+      ];
+
+      if (typeof projectId === 'string' && projectId !== '') {
+        params.unshift(`project_id=${projectId}`);
+      }
+
+      return `?${params.join('&')}`;
+    }
+
+    /**
+     * Get last execution time by mode.
+     * @param {string} mode - Time or date.
+     * @return {string} Last execution time.
+     */
+    getLastExecutionTime(mode) {
+      if (mode === fetchMode.time) {
+        return this._lastExecutionTime;
+      }
+      return this._lastExecutionTime.replace(/T.*/, ''); // Date
+    }
+
+    /**
+     * Send the desktop notification.
+     * @param {Object} issues - All of updated issues.
+     * @param {boolean} isOverPage - true if over 1 page.
+     * @return {Object} Current object.
+     */
+    notify(issues, isOverPage) {
+      const issueCount = issues.length;
+
+      if (issueCount === 0) {
+        return this;
+      }
+
+      this._mostRecentIssueId = issues[0].id;
+      notifierScreen.setNotificationIcon(this._index);
+
+      // Display the latest issue's subject only
+      nodeNotifier.notify({
+        title: this.buildNotificationTitle(issueCount, isOverPage),
+        message: issues[0].subject,
+        icon: appIconFilePath,
+        wait: true
+      });
+
+      nodeNotifier.removeAllListeners();
+
+      nodeNotifier.once('click', () => {
+        shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
+        notifierScreen.setNormalIcon();
+        nodeNotifier.removeAllListeners();
+      });
+
+      nodeNotifier.once('timeout', () => {
+        nodeNotifier.removeAllListeners();
+      });
+
+      return this;
+    }
+
+    /**
+     * Build a notification title.
+     * @param {number} issueCount - Count of issues.
+     * @param {boolean} isOverPage - true if over 1 page.
+     * @return {string} Notification title.
+     */
+    buildNotificationTitle(issueCount, isOverPage) {
+      let title = `(${issueCount}`;
+      if (isOverPage) {
+        title += '+';
+      }
+      title += ') Redmine Notifier';
+
+      return title;
+    }
+  }
 
   /**
    * Class to handle settings screen.
@@ -53,10 +412,10 @@
       this._mostRecentNotifierIndex = null;
 
       if (isMac) {
-        this._iconFilePath             = `${__dirname}/images/${blackIconFilename24}`;
+        this._iconFilePath = `${__dirname}/images/${blackIconFilename24}`;
         this._notificationIconFilePath = `${__dirname}/images/${blackIconFilename24Notification}`;
       } else {
-        this._iconFilePath             = `${__dirname}/images/${colorIconFilename24}`;
+        this._iconFilePath = `${__dirname}/images/${colorIconFilename24}`;
         this._notificationIconFilePath = `${__dirname}/images/${colorIconFilename24Notification}`;
       }
     }
@@ -85,19 +444,19 @@
         {
           label: 'Edit',
           submenu: [
-            { role: 'undo' },
-            { role: 'redo' },
-            { role: 'cut' },
-            { role: 'copy' },
-            { role: 'paste' },
-            { role: 'selectall' }
+            {role: 'undo'},
+            {role: 'redo'},
+            {role: 'cut'},
+            {role: 'copy'},
+            {role: 'paste'},
+            {role: 'selectall'}
           ]
         }
       ]);
 
       let aboutMenuItem;
       if (isMac) {
-        aboutMenuItem = { role: 'about' };
+        aboutMenuItem = {role: 'about'};
       } else {
         aboutMenuItem = {
           label: `About ${appName}`,
@@ -273,7 +632,7 @@
      * @return {RedmineNotifier[]} Valid RedmineNotifier objects.
      */
     selectValidNotifiers() {
-      return this._notifiers.filter((notifier) => {
+      return this._notifiers.filter(notifier => {
         return notifier._settings.url !== null;
       });
     }
@@ -379,397 +738,19 @@
   }
 
   /**
-   * Class to check updated issues.
+   * Check whether old settings exist.
+   * @param {Object} oldSettings - Old settings.
+   * @return {boolean} true if old settings exist.
    */
-  class RedmineNotifier {
-    /**
-     * Initialize the RedmineNotifier object.
-     * @constructor
-     * @param {number} index - Index of the object.
-     */
-    constructor(index) {
-      this._newFlag = false;
-      this._index = index;
-      this._lastExecutionTime = null;
-      this._settings = null;
-      this._fetchTimer = null;
-      this._fetchMode = null;
-      this._mostRecentIssueId = null;
-    }
-
-    /**
-     * Set flag of whether the object is new.
-     * @param {boolean} newFlag - true if the object is new.
-     * @return {Object} Current object.
-     */
-    setNewFlag(newFlag) {
-      this._newFlag = newFlag;
-      return this;
-    }
-
-    /**
-     * Display the settings on the screen.
-     * @return {Object} Current object.
-     */
-    displaySettings() {
-      document.getElementById('url').value = this._settings.url;
-      document.getElementById('api-key').value = this._settings.apiKey;
-      document.getElementById('project-id').value = this._settings.projectId;
-      document.getElementById('fetch-interval-sec').value = this._settings.fetchIntervalSec;
-      return this;
-    }
-
-    /**
-     * Get the settings from the screen.
-     * @return {Object} Settings.
-     */
-    getPageSettings() {
-      return {
-        url: document.getElementById('url').value,
-        apiKey: document.getElementById('api-key').value,
-        projectId: document.getElementById('project-id').value,
-        fetchIntervalSec: document.getElementById('fetch-interval-sec').value
-      };
-    }
-
-    /**
-     * Read the settings from the screen.
-     * @return {Object} Current object.
-     */
-    readScreenSettings() {
-      this._settings = this.getPageSettings();
-      return this;
-    }
-
-    /**
-     * Read the settings from the localStorage.
-     * @return {Object} Current object.
-     */
-    readStoredSettings() {
-      this._settings = {
-        url: localStorage.getItem(`url${this._index}`),
-        apiKey: localStorage.getItem(`apiKey${this._index}`),
-        projectId: localStorage.getItem(`projectId${this._index}`),
-        fetchIntervalSec: localStorage.getItem(`fetchIntervalSec${this._index}`)
-      };
-
-      return this;
-    }
-
-    /**
-     * Get the setting from the localStorage.
-     * @param {string} key - Setting key.
-     * @return {string} Setting value.
-     */
-    getStoredSetting(key) {
-      return localStorage.getItem(`${key}${this._index}`);
-    }
-
-    /**
-     * Update the stored last execution time.
-     * @return {Object} Current object.
-     */
-    updateLastExecutionTime() {
-      this._lastExecutionTime = (new Date()).toISOString().replace(/\.\d+Z$/, 'Z');
-      localStorage.setItem(`lastExecutionTime${this._index}`, this._lastExecutionTime);
-      return this;
-    }
-
-    /**
-     * Update the stored settings.
-     * @return {Object} Current object.
-     */
-    updateSettings() {
-      localStorage.setItem(`url${this._index}`, this._settings.url);
-      localStorage.setItem(`apiKey${this._index}`, this._settings.apiKey);
-      localStorage.setItem(`projectId${this._index}`, this._settings.projectId);
-      localStorage.setItem(`fetchIntervalSec${this._index}`, this._settings.fetchIntervalSec);
-      return this;
-    }
-
-    /**
-     * Delete the settings.
-     * @return {Object} Current object.
-     */
-    deleteStoredSettings() {
-      localStorage.removeItem(`url${this._index}`);
-      localStorage.removeItem(`apiKey${this._index}`);
-      localStorage.removeItem(`projectId${this._index}`);
-      localStorage.removeItem(`fetchIntervalSec${this._index}`);
-      return this;
-    }
-
-    /**
-     * Validate the settings.
-     * @return {boolean} true if valid.
-     */
-    validateSettings() {
-      if (this._settings.url && this._settings.apiKey) {
+  const hasOldSettings = oldSettings => {
+    for (let key in oldSettings) {
+      if (Object.prototype.hasOwnProperty.call(oldSettings, key) && oldSettings[key] !== null) {
         return true;
-      } else {
-        notie.alert('error', 'Please enter required fields.', notieDisplaySec);
-        return false;
       }
     }
 
-    /**
-     * Initialize the fetch function.
-     * @return {Object} Current object.
-     */
-    initFetch() {
-      const intervalMsec = 1000 * (this._settings.fetchIntervalSec || defaultFetchIntervalSec);
-
-      clearInterval(this._fetchTimer);
-
-      this._fetchTimer = setInterval(() => {
-        this.fetch(this._fetchMode || fetchMode.time);
-      }, intervalMsec);
-
-      return this;
-    }
-
-    /**
-     * Fetch updated issues by using Redmine REST API.
-     * @param {string} mode - Time or date.
-     * @return {Object} Current object.
-     */
-    fetch(mode) {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          this.handleResponseFetch(mode, xhr.status, xhr.responseText);
-        }
-      };
-
-      xhr.open('GET', `${this._settings.url}/issues.json${this.getRequestParams(mode, this._settings.projectId)}`);
-      xhr.setRequestHeader('X-Redmine-API-Key', this._settings.apiKey);
-      xhr.send();
-
-      return this;
-    }
-
-    /**
-     * Handle the response for the fetch.
-     * @param {string} mode - Time or date.
-     * @param {number} status - Response status.
-     * @param {string} responseText - Response text.
-     * @return {Object} Current object.
-     */
-    handleResponseFetch(mode, status, responseText) {
-      if (mode === fetchMode.time) {
-        if (status === 200) {
-          const response = JSON.parse(responseText);
-          this.notify(response.issues, this.isOverPage(response))
-            .updateLastExecutionTime();
-        } else if (status === 422) {
-          // Retry with date mode if Redmine API doesn't accept time format
-          this._fetchMode = fetchMode.date;
-          this.fetch(fetchMode.date);
-        }
-      } else {
-        if (status === 200) {
-          const response = JSON.parse(responseText);
-          this.notify(this.pickIssues(response.issues), this.isOverPage(response));
-        }
-
-        this.updateLastExecutionTime();
-      }
-
-      return this;
-    }
-
-    /**
-     * Check whether issues over 1 page.
-     * @param {Object} response - Response.
-     * @return {boolean} true if over 1 page.
-     */
-    isOverPage(response) {
-      return response.total_count > response.limit;
-    }
-
-    /**
-     * Get issues which were updated after last execution time.
-     * @param {string} responseIssues - Response issues.
-     * @return {Object[]} Processed issues.
-     */
-    pickIssues(responseIssues) {
-      const lastExecutionTime = new Date(this._lastExecutionTime).getTime();
-
-      const issues = responseIssues.filter((issue) => {
-        const updatedTime = new Date(issue.updated_on).getTime();
-        return updatedTime >= lastExecutionTime;
-      });
-
-      return issues;
-    }
-
-    /**
-     * Test the connection to the Redmine.
-     * @param {string} mode - Time or date.
-     * @return {Object} Current object.
-     */
-    testConnection(mode) {
-      const xhr = new XMLHttpRequest();
-      const pageSettings = this.getPageSettings();
-
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          this.handleResponseTestConnection(mode, xhr.status);
-        }
-      };
-
-      xhr.open('GET', `${pageSettings.url}/issues.json${this.getRequestParams(mode, pageSettings.projectId)}`);
-      xhr.setRequestHeader('X-Redmine-API-Key', pageSettings.apiKey);
-      xhr.send();
-
-      return this;
-    }
-
-    /**
-     * Handle the response for the test connection.
-     * @param {string} mode - Time or date.
-     * @param {number} status - Response status.
-     * @return {Object} Current object.
-     */
-    handleResponseTestConnection(mode, status) {
-      if (status === 200) {
-        notie.alert('success', 'Connection succeeded.', notieDisplaySec);
-        return this;
-      }
-
-      // Retry with date mode if Redmine API doesn't accept time format
-      if (mode === fetchMode.time && status === 422) {
-        this.testConnection(fetchMode.date);
-        return this;
-      }
-
-      notie.alert('error', 'Connection failed.', notieDisplaySec);
-
-      return this;
-    }
-
-    /**
-     * Get the request parameters.
-     * @param {string} mode - Time or date.
-     * @param {string} projectId - Project ID (a numeric value, not a project identifier).
-     * @return {string} Request parameters.
-     */
-    getRequestParams(mode, projectId) {
-      const params = [
-        `updated_on=%3E%3D${this.getLastExecutionTime(mode)}`,
-        'status_id=*',
-        'sort=updated_on:desc',
-        'limit=100'
-      ];
-
-      if (typeof projectId === 'string' && projectId !== '') {
-        params.unshift(`project_id=${projectId}`);
-      }
-
-      return `?${params.join('&')}`;
-    }
-
-    /**
-     * Get last execution time by mode.
-     * @param {string} mode - Time or date.
-     * @return {string} Last execution time.
-     */
-    getLastExecutionTime(mode) {
-      if (mode === fetchMode.time) {
-        return this._lastExecutionTime;
-      } else {
-        return this._lastExecutionTime.replace(/T.*/, ''); // Date
-      }
-    }
-
-    /**
-     * Send the desktop notification.
-     * @param {Object} issues - All of updated issues.
-     * @param {boolean} isOverPage - true if over 1 page.
-     * @return {Object} Current object.
-     */
-    notify(issues, isOverPage) {
-      const issueCount = issues.length;
-
-      if (issueCount === 0) return this;
-
-      this._mostRecentIssueId = issues[0].id;
-      notifierScreen.setNotificationIcon(this._index);
-
-      // Display the latest issue's subject only
-      nodeNotifier.notify({
-        title: this.buildNotificationTitle(issueCount, isOverPage),
-        message: issues[0].subject,
-        icon: appIconFilePath,
-        wait: true
-      });
-
-      nodeNotifier.removeAllListeners();
-
-      nodeNotifier.once('click', () => {
-        shell.openExternal(`${this._settings.url}/issues/${this._mostRecentIssueId}`);
-        notifierScreen.setNormalIcon();
-        nodeNotifier.removeAllListeners();
-      });
-
-      nodeNotifier.once('timeout', () => {
-        nodeNotifier.removeAllListeners();
-      });
-
-      return this;
-    }
-
-    /**
-     * Build a notification title.
-     * @param {number} issueCount - Count of issues.
-     * @param {boolean} isOverPage - true if over 1 page.
-     * @return {string} Notification title.
-     */
-    buildNotificationTitle(issueCount, isOverPage) {
-      let title = `(${issueCount}`;
-      if (isOverPage) {
-        title += '+';
-      }
-      title += ') Redmine Notifier';
-
-      return title;
-    }
-  }
-
-  window.addEventListener('load', () => {
-    migrateOldSettings();
-
-    notie.setOptions({ colorInfo: '#3e5b76' });
-
-    let notifiers = [];
-    const notifierCount = Number(localStorage.getItem('notifierCount'));
-
-    for (let i = 0; i < notifierCount; i++) {
-      const notifier = new RedmineNotifier(i);
-      notifier.updateLastExecutionTime()
-        .readStoredSettings();
-
-      if (notifier.validateSettings()) {
-        notifier.initFetch();
-      }
-
-      notifiers.push(notifier);
-    }
-
-    if (notifiers.length === 0) {
-      const notifier = new RedmineNotifier(0);
-      notifier.updateLastExecutionTime()
-        .readStoredSettings();
-      notifiers.push(notifier);
-    }
-
-    notifierScreen = new RedmineNotifierScreen();
-    notifierScreen.initNotifiers(notifiers)
-      .initMenu()
-      .initEventListener()
-      .displayDefaultSettings();
-  });
+    return false;
+  };
 
   /**
    * Migrate the settings of Redmine Notifier 0.5.0 or 0.6.0.
@@ -808,19 +789,38 @@
     return true;
   };
 
-  /**
-   * Check whether old settings exist.
-   * @param {Object} oldSettings - Old settings.
-   * @return {boolean} true if old settings exist.
-   */
-  const hasOldSettings = (oldSettings) => {
-    for (let key in oldSettings) {
-      if (oldSettings.hasOwnProperty(key) && oldSettings[key] !== null) {
-        return true;
+  window.addEventListener('load', () => {
+    migrateOldSettings();
+
+    notie.setOptions({colorInfo: '#3e5b76'});
+
+    let notifiers = [];
+    const notifierCount = Number(localStorage.getItem('notifierCount'));
+
+    for (let i = 0; i < notifierCount; i++) {
+      const notifier = new RedmineNotifier(i);
+      notifier.updateLastExecutionTime()
+        .readStoredSettings();
+
+      if (notifier.validateSettings()) {
+        notifier.initFetch();
       }
+
+      notifiers.push(notifier);
     }
 
-    return false;
-  };
+    if (notifiers.length === 0) {
+      const notifier = new RedmineNotifier(0);
+      notifier.updateLastExecutionTime()
+        .readStoredSettings();
+      notifiers.push(notifier);
+    }
+
+    notifierScreen = new RedmineNotifierScreen();
+    notifierScreen.initNotifiers(notifiers)
+      .initMenu()
+      .initEventListener()
+      .displayDefaultSettings();
+  });
 })();
 

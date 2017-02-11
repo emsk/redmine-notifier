@@ -4,6 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/emsk/redmine-notifier/badges/gpa.svg)](https://codeclimate.com/github/emsk/redmine-notifier)
 [![Dependency Status](https://gemnasium.com/emsk/redmine-notifier.svg)](https://gemnasium.com/emsk/redmine-notifier)
 [![Inline docs](http://inch-ci.org/github/emsk/redmine-notifier.svg?branch=master)](http://inch-ci.org/github/emsk/redmine-notifier)
+[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Redmine Notifier is a simple updated issues checker that runs in the background.
@@ -60,13 +61,13 @@ Redmine Notifier is powered by [Electron](http://electron.atom.io/), so we can d
 * [chai-as-promised](https://github.com/domenic/chai-as-promised)
 * [electron](https://github.com/electron/electron)
 * [electron-builder](https://github.com/electron-userland/electron-builder)
-* [eslint](https://github.com/eslint/eslint)
 * [mocha](https://github.com/mochajs/mocha)
 * [spectron](https://github.com/electron/spectron)
 * [stylelint](https://github.com/stylelint/stylelint)
 * [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard)
 * [textlint](https://github.com/textlint/textlint)
 * [textlint-rule-write-good](https://github.com/nodaguti/textlint-rule-write-good)
+* [xo](https://github.com/sindresorhus/xo)
 
 See `dependencies` and `devDependencies` in [`package.json`](package.json).
 
