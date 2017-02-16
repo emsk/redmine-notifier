@@ -28,7 +28,7 @@
     "xo": "~0.17.1"
   },
   "build": {
-    "appId": "redmine-notifier",
+    "appId": "com.emsk.redmine-notifier",
     "category": "public.app-category.productivity",
     "asarUnpack": "images/*",
     "copyright": "Copyright (c) 2015-2017 emsk",
