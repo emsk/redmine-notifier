@@ -1066,7 +1066,7 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-concat-stream@1.5.0:
+concat-stream@1.5.0, concat-stream@^1.4.6:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.5.0.tgz#53f7d43c51c5e43f81c8fdd03321c631be68d611"
   dependencies:
@@ -1074,7 +1074,7 @@ concat-stream@1.5.0:
     readable-stream "~2.0.0"
     typedarray "~0.0.5"
 
-concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^1.5.1:
+concat-stream@^1.4.7, concat-stream@^1.5.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.0.tgz#0aac662fd52be78964d5532f694784e70110acf7"
   dependencies:
@@ -2582,7 +2582,7 @@ is-plain-obj@^1.0.0:
 
 is-posix-bracket@^0.1.0:
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz#3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
+  resolved "http://registry.npmjs.org/is-posix-bracket/-/is-posix-bracket-0.1.1.tgz#3334dc79774368e92f016e6fbc0a88f5cd6e6bc4"
 
 is-primitive@^2.0.0:
   version "2.0.0"
@@ -3857,7 +3857,7 @@ regenerator-runtime@^0.10.0:
 
 regex-cache@^0.4.2:
   version "0.4.3"
-  resolved "https://registry.yarnpkg.com/regex-cache/-/regex-cache-0.4.3.tgz#9b1a6c35d4d0dfcef5711ae651e8e9d3d7114145"
+  resolved "http://registry.npmjs.org/regex-cache/-/regex-cache-0.4.3.tgz#9b1a6c35d4d0dfcef5711ae651e8e9d3d7114145"
   dependencies:
     is-equal-shallow "^0.1.3"
     is-primitive "^2.0.0"
@@ -4533,20 +4533,20 @@ textlint-plugin-text@^1.0.1:
   dependencies:
     txt-to-ast "^1.0.2"
 
-textlint-rule-helper@^1.1.5:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/textlint-rule-helper/-/textlint-rule-helper-1.2.0.tgz#be68d47a5146b16dd116278c9aeb7bd35631ccda"
+textlint-rule-helper@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/textlint-rule-helper/-/textlint-rule-helper-2.0.0.tgz#95cb4696c95c4258d2e3389e9e64b849f9721382"
   dependencies:
     unist-util-visit "^1.1.0"
 
-textlint-rule-write-good@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/textlint-rule-write-good/-/textlint-rule-write-good-0.1.4.tgz#abe9865f7ce0205aa8890ba45c0a35f2d2371fa5"
+textlint-rule-write-good@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/textlint-rule-write-good/-/textlint-rule-write-good-1.6.0.tgz#1346b5f5271602304d5943664123856f2bad1db6"
   dependencies:
-    textlint-rule-helper "^1.1.5"
-    write-good "^0.9.1"
+    textlint-rule-helper "^2.0.0"
+    write-good "^0.10.0"
 
-textlint@^7.1.4:
+textlint@^7.2.2:
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/textlint/-/textlint-7.2.2.tgz#3e725f903e60c0beedb8085fef8d109316811f7a"
   dependencies:
@@ -4949,9 +4949,9 @@ write-file-stdout@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/write-file-stdout/-/write-file-stdout-0.0.2.tgz#c252d7c7c5b1b402897630e3453c7bfe690d9ca1"
 
-write-good@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/write-good/-/write-good-0.9.1.tgz#a2ea34869bfa5effc7f8325467e25714fe50129a"
+write-good@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/write-good/-/write-good-0.10.0.tgz#b641141d10ca1f544bc878f8e2bee627d9740d0e"
   dependencies:
     adverb-where "~0.0.0"
     no-cliches "~0.1.0"
