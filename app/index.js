@@ -1,6 +1,7 @@
 'use strict';
 
 (() => {
+  const isMac = process.platform === 'darwin';
   const defaultFetchIntervalSec = 600;
   const notieDisplaySec = 1.5;
   const colorIconFilename64 = 'redmine_icon_color_64.png';
@@ -8,6 +9,7 @@
   const blackIconFilename24Notification = 'redmine_icon_black_24_notification.png';
   const colorIconFilename24 = 'redmine_icon_color_24.png';
   const colorIconFilename24Notification = 'redmine_icon_color_24_notification.png';
+  const fetchMode = Object.freeze({time: 'TIME', date: 'DATE'});
 
   const electron = require('electron');
   const remote = electron.remote;
@@ -18,9 +20,6 @@
   const Tray = remote.Tray;
   const fs = require('fs');
   const notie = require('notie');
-  const nodeNotifier = require('node-notifier');
-
-  const isMac = process.platform === 'darwin';
 
   const appName = app.getName();
   const appCopyright = 'Copyright (c) 2015-2017 emsk';
@@ -31,9 +30,15 @@
   } catch (err) {
     appDir = __dirname; // Development
   }
-  const appIconFilePath = `${appDir}/images/${colorIconFilename64}`;
 
-  const fetchMode = Object.freeze({time: 'TIME', date: 'DATE'});
+  let nodeNotifier = require('node-notifier');
+  if (isMac) {
+    nodeNotifier = new nodeNotifier.NotificationCenter({
+      customPath: `${appDir}/custom/terminal-notifier.app/Contents/MacOS/terminal-notifier`
+    });
+  }
+
+  const appIconFilePath = isMac ? null : `${appDir}/images/${colorIconFilename64}`;
 
   let notifierScreen = null;
 

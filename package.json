@@ -30,7 +30,7 @@
   "build": {
     "appId": "com.emsk.redmine-notifier",
     "category": "public.app-category.productivity",
-    "asarUnpack": "images/*",
+    "asarUnpack": "{custom,images}/**/*",
     "copyright": "Copyright (c) 2015-2017 emsk",
     "mac": {
       "target": "dmg"
