@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>Terminal</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.emsk.redmine-notifier</string>
+	<string>com.emsk.terminal-notifier</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
