@@ -36,6 +36,10 @@
     nodeNotifier = new nodeNotifier.NotificationCenter({
       customPath: `${appDir}/custom/terminal-notifier.app/Contents/MacOS/terminal-notifier`
     });
+  } else {
+    nodeNotifier = new nodeNotifier.WindowsToaster({
+      customPath: `${appDir}/custom/SnoreToast.exe`
+    });
   }
 
   const appIconFilePath = isMac ? null : `${appDir}/images/${colorIconFilename64}`;
@@ -365,7 +369,6 @@
       nodeNotifier.notify({
         title: this.buildNotificationTitle(issueCount, isOverPage),
         message: issues[0].subject,
-        icon: appIconFilePath,
         wait: true
       });
 
