@@ -12,7 +12,7 @@ It sends a desktop notification if there are any updates in issues.
 
 ## Installation
 
-Installers for OS X and Windows can be found on the [releases](../../releases) page.
+Installers for macOS and Windows can be found on the [releases](../../releases) page.
 
 For Windows, the app is installed to `C:\Users\[UserName]\AppData\Local\redmine\app-[AppVersion]\Redmine Notifier.exe`.
 
@@ -30,7 +30,7 @@ Also, the subject is shown only about the latest issue.
 When Redmine Notifier is started, an icon appears in the menu bar or task tray.
 If there is a notification in the most recent fetch, the icon is replaced by the notification icon.
 
-##### Menu Icon (OS X)
+##### Menu Icon (macOS)
 
 Normal: ![Icon Mac Normal](examples/icon_osx_normal.png?raw=true) Notification: ![Icon Mac Notification](examples/icon_osx_notification.png?raw=true)
 
