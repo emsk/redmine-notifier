@@ -18,7 +18,7 @@
   "devDependencies": {
     "ava": "~0.18.1",
     "electron": "1.4.15",
-    "electron-builder": "13.11.1",
+    "electron-builder": "14.4.0",
     "electron-builder-squirrel-windows": "13.10.1",
     "spectron": "~3.4.0",
     "stylelint": "~7.8.0",
@@ -29,11 +29,13 @@
   },
   "build": {
     "appId": "com.emsk.redmine-notifier",
-    "category": "public.app-category.productivity",
     "asarUnpack": "{custom,images}/**/*",
     "copyright": "Copyright (c) 2015-2017 emsk",
     "mac": {
-      "target": "dmg"
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg"
+      ]
     },
     "dmg": {
       "iconSize": 120,
@@ -52,7 +54,9 @@
       ]
     },
     "win": {
-      "target": "squirrel"
+      "target": [
+        "squirrel"
+      ]
     }
   },
   "xo": {
