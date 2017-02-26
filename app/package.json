@@ -1,7 +1,7 @@
 {
   "name": "redmine-notifier",
   "productName": "Redmine Notifier",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Redmine Notifier",
   "main": "main.js",
   "repository": {

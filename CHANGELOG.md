@@ -1,5 +1,34 @@
 # Change Log 
 
+## 0.8.0 (2017-02-26)
+
+### Production
+
+* Fix bug that closed issues are not fetched
+* Fix bug that more than 25 issues are not fetched at once
+* Remove small terminal icon in main notification for macOS
+* Change icon in main notification for Windows
+* Add `About Redmine Notifier` menu
+* Change style of text fields
+* Change app ID
+* Update to Electron 1.4.15
+* Update notie dependency to 3.9.5
+* Update node-notifier dependency to 5.0.2
+
+### Development
+
+* Add `postinstall` task
+* Add `clean` task
+* Remove redundant `build` task
+* Use yarn instead of npm
+* Use ava instead of mocha, chai, and chai-as-promised
+* Use xo instead of eslint
+* Use stylelint instead of csslint
+* Update electron-builder dependency to 14.4.0
+* Update spectron dependency to ~3.4.0
+* Update textlint dependency to ^7.2.2
+* Update to Node.js 6 on Travis CI
+
 ## 0.7.1 (2016-09-11)
 
 ### Production

@@ -22,8 +22,7 @@ The number of issues that were updated after previous fetch is shown in parenthe
 Also, the subject is shown only about the latest issue.
 
 ![Notification Mac 10.10](examples/notification_osx_10.10.png?raw=true)
-![Notification Win 8.1](examples/notification_win_8.1.png?raw=true)
-![Notification Win 7](examples/notification_win_7.png?raw=true)
+![Notification Win 10](examples/notification_win_10.png?raw=true)
 
 ## Sub Notifications
 
