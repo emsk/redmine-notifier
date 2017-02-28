@@ -19,9 +19,9 @@ node-notifier@5.0.2:
     shellwords "^0.1.0"
     which "^1.2.12"
 
-notie@3.9.5:
-  version "3.9.5"
-  resolved "https://registry.yarnpkg.com/notie/-/notie-3.9.5.tgz#dd203c3a7210207fc9838c777c40953532577aa5"
+notie@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/notie/-/notie-4.1.0.tgz#44461b9fa77455c4925fbb6b0bffc5b420843d91"
 
 semver@^5.3.0:
   version "5.3.0"

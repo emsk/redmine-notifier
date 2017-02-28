@@ -175,7 +175,11 @@
       if (this._settings.url && this._settings.apiKey) {
         return true;
       }
-      notie.alert('error', 'Please enter required fields.', notieDisplaySec);
+      notie.alert({
+        type: 'error',
+        text: 'Please enter required fields.',
+        time: notieDisplaySec
+      });
       return false;
     }
 
@@ -301,7 +305,11 @@
      */
     handleResponseTestConnection(mode, status) {
       if (status === 200) {
-        notie.alert('success', 'Connection succeeded.', notieDisplaySec);
+        notie.alert({
+          type: 'success',
+          text: 'Connection succeeded.',
+          time: notieDisplaySec
+        });
         return this;
       }
 
@@ -311,7 +319,11 @@
         return this;
       }
 
-      notie.alert('error', 'Connection failed.', notieDisplaySec);
+      notie.alert({
+        type: 'error',
+        text: 'Connection failed.',
+        time: notieDisplaySec
+      });
 
       return this;
     }
@@ -543,7 +555,11 @@
             notifier.setNewFlag(false);
           }
 
-          notie.alert('success', 'Settings have been saved.', notieDisplaySec);
+          notie.alert({
+            type: 'success',
+            text: 'Settings have been saved.',
+            time: notieDisplaySec
+          });
         } else {
           notifier.readStoredSettings();
         }
@@ -581,13 +597,21 @@
       });
 
       document.getElementById('delete-button').addEventListener('click', () => {
-        notie.confirm('Are you sure you want to delete this setting?', 'Yes', 'No', () => {
-          this.deleteCurrentNotifierSettings()
-            .resetAllSettings()
-            .updateNotifierCount()
-            .displaySettingsAfterDelete();
+        notie.confirm({
+          text: 'Are you sure you want to delete this setting?',
+          cancelText: 'No',
+          submitCallback: () => {
+            this.deleteCurrentNotifierSettings()
+              .resetAllSettings()
+              .updateNotifierCount()
+              .displaySettingsAfterDelete();
 
-          notie.alert('success', 'Settings have been deleted.', notieDisplaySec);
+            notie.alert({
+              type: 'success',
+              text: 'Settings have been deleted.',
+              time: notieDisplaySec
+            });
+          }
         });
       });
 
@@ -655,8 +679,7 @@
       const notifiers = this.selectValidNotifiers();
       notifiers.forEach((notifier, index) => {
         choices.push({
-          title: notifier.getStoredSetting('url'),
-          color: '#628db6',
+          text: notifier.getStoredSetting('url'),
           handler: () => {
             this._currentNotifierIndex = index;
             this.updateLastDisplayedNotifierIndex();
@@ -668,7 +691,10 @@
         });
       });
 
-      notie.select('Stored URLs', 'Cancel', choices);
+      notie.select({
+        text: 'Stored URLs',
+        choices: choices
+      });
 
       return this;
     }
@@ -800,7 +826,11 @@
   window.addEventListener('load', () => {
     migrateOldSettings();
 
-    notie.setOptions({colorInfo: '#3e5b76'});
+    notie.setOptions({
+      classes: {
+        selectChoice: 'notie-select-choice'
+      }
+    });
 
     let notifiers = [];
     const notifierCount = Number(localStorage.getItem('notifierCount'));

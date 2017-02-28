@@ -158,17 +158,18 @@ a {
   padding: 0;
 }
 
-#notie-confirm-yes,
-#notie-confirm-no,
-#notie-confirm-background,
-.notie-select-choice,
-#notie-select-cancel,
-#notie-select-background {
+.notie-container {
   -webkit-app-region: no-drag;
+  max-height: 100%;
+  overflow: auto;
 }
 
-#notie-select-choices {
+.notie-textbox.notie-background-info {
+  background-color: #3e5b76;
+}
+
+.notie-select-choice {
+  background-color: #628db6;
   font-size: 0.8em;
-  max-height: 171px;
-  overflow: auto;
+  line-height: 1.7em;
 }
