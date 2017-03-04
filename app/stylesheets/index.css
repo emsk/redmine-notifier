@@ -160,12 +160,15 @@ a {
 
 .notie-container {
   -webkit-app-region: no-drag;
-  max-height: 100%;
-  overflow: auto;
 }
 
 .notie-textbox.notie-background-info {
   background-color: #3e5b76;
+}
+
+.notie-select-container {
+  max-height: 184px;
+  overflow: auto;
 }
 
 .notie-select-choice {

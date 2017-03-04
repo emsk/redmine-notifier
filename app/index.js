@@ -696,6 +696,29 @@
         choices: choices
       });
 
+      this.wrapURLMenuItems();
+
+      return this;
+    }
+
+    /**
+     * Wrap an HTMLElement around URL menu item elements.
+     * @return {Object} Current object.
+     */
+    wrapURLMenuItems() {
+      const selectContainer = document.createElement('div');
+      selectContainer.className = 'notie-select-container';
+
+      const selectChoices = Array.prototype.slice.call(document.getElementsByClassName('notie-select-choice'));
+      const notieContainer = selectChoices[0].parentNode;
+
+      selectChoices.forEach(choice => {
+        selectContainer.appendChild(choice);
+      });
+
+      const cancelButton = notieContainer.getElementsByClassName('notie-background-neutral notie-button')[0];
+      notieContainer.insertBefore(selectContainer, cancelButton);
+
       return this;
     }
 
