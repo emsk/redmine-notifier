@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "ava": "~0.18.1",
-    "electron": "1.4.15",
+    "electron": "1.6.1",
     "electron-builder": "14.4.0",
     "electron-builder-squirrel-windows": "13.10.1",
     "spectron": "~3.4.0",
