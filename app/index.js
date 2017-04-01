@@ -693,7 +693,7 @@
 
       notie.select({
         text: 'Stored URLs',
-        choices: choices
+        choices
       });
 
       this.wrapURLMenuItems();
