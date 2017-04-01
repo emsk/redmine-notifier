@@ -674,7 +674,7 @@
      * @return {Object} Current object.
      */
     openURLMenu() {
-      let choices = [];
+      const choices = [];
 
       const notifiers = this.selectValidNotifiers();
       notifiers.forEach((notifier, index) => {
@@ -800,7 +800,7 @@
    * @return {boolean} true if old settings exist.
    */
   const hasOldSettings = oldSettings => {
-    for (let key in oldSettings) {
+    for (const key in oldSettings) {
       if (Object.prototype.hasOwnProperty.call(oldSettings, key) && oldSettings[key] !== null) {
         return true;
       }
@@ -855,7 +855,7 @@
       }
     });
 
-    let notifiers = [];
+    const notifiers = [];
     const notifierCount = Number(localStorage.getItem('notifierCount'));
 
     for (let i = 0; i < notifierCount; i++) {
