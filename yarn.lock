@@ -4709,7 +4709,7 @@ textlint-rule-write-good@^1.6.0:
     textlint-rule-helper "^2.0.0"
     write-good "^0.10.0"
 
-textlint@^7.3.0:
+textlint@^7.4.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/textlint/-/textlint-7.4.0.tgz#854e6f5c98281943e6d7e5f50a8a23b4d42f930c"
   dependencies:
