@@ -4,6 +4,7 @@
     "stylelint-order"
   ],
   "rules": {
+    "font-family-no-missing-generic-family-keyword": null,
     "order/properties-alphabetical-order": true
   }
 }
