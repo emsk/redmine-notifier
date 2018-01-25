@@ -4746,9 +4746,9 @@ specificity@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/specificity/-/specificity-0.3.1.tgz#f1b068424ce317ae07478d95de3c21cf85e8d567"
 
-spectron@~3.6.0:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/spectron/-/spectron-3.6.4.tgz#56f42ab5c48154791d8db2f3b531b258e7205aa0"
+spectron@~3.6.5:
+  version "3.6.5"
+  resolved "https://registry.yarnpkg.com/spectron/-/spectron-3.6.5.tgz#ca043c04d2876e6c89ae486273081b3fc48c0228"
   dependencies:
     dev-null "^0.1.1"
     electron-chromedriver "~1.6.0"
