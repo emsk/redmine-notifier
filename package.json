@@ -18,8 +18,8 @@
   "devDependencies": {
     "ava": "~0.25.0",
     "electron": "1.6.16",
-    "electron-builder": "19.55.3",
-    "electron-builder-squirrel-windows": "17.0.1",
+    "electron-builder": "20.11.0",
+    "electron-builder-squirrel-windows": "20.11.0",
     "spectron": "~3.6.5",
     "stylelint": "~8.4.0",
     "stylelint-config-standard": "~18.0.0",

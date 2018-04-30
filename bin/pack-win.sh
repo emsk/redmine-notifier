@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 cd $(dirname $0)/..
-$(yarn bin)/build --win --x64
-mv './dist/win/Redmine Notifier Setup 0.8.0.exe' ./dist/win/RedmineNotifierSetup-0.8.0.exe
+$(yarn bin)/electron-builder --win --x64 --publish never
+mv './dist/squirrel-windows/Redmine Notifier Setup 0.8.0.exe' ./dist/squirrel-windows/RedmineNotifierSetup-0.8.0.exe
