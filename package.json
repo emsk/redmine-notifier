@@ -23,7 +23,7 @@
     "spectron": "~3.8.0",
     "stylelint": "~9.2.0",
     "stylelint-config-standard": "~18.2.0",
-    "stylelint-order": "~0.8.0",
+    "stylelint-order": "~0.8.1",
     "textlint": "^10.1.4",
     "textlint-rule-write-good": "^1.6.2",
     "xo": "~0.18.2"
