@@ -30,7 +30,7 @@
       maximizable: false
     });
 
-    win.loadURL(`file://${__dirname}/index.html`);
+    win.loadFile(`${__dirname}/index.html`);
 
     win.on('closed', () => {
       win = null;
