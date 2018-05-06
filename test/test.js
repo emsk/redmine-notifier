@@ -16,10 +16,10 @@ test.afterEach.always(async t => {
 });
 
 test(async t => {
-  const app = t.context.app;
+  const {app} = t.context;
   await app.client.waitUntilWindowLoaded();
 
-  const client = app.client;
+  const {client} = app;
   t.is(await client.getWindowCount(), 1);
   t.regex(await client.getUrl(), /^file:\/\/.+\/index.html$/);
   t.is(await client.getTitle(), 'Preferences');
