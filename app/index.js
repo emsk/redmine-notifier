@@ -17,7 +17,7 @@
   const notie = require('notie');
 
   const appName = app.getName();
-  const appCopyright = 'Copyright (c) 2015-2018 emsk';
+  const appCopyright = 'Copyright (c) 2015-2019 emsk';
 
   let appDir = `${__dirname}.unpacked`; // Production
   try {
