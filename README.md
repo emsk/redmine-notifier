@@ -1,8 +1,8 @@
 # Redmine Notifier
 
-[![Build Status](https://travis-ci.org/emsk/redmine-notifier.svg?branch=master)](https://travis-ci.org/emsk/redmine-notifier)
+[![Build Status](https://travis-ci.org/emsk/redmine-notifier.svg?branch=main)](https://travis-ci.org/emsk/redmine-notifier)
 [![Code Climate](https://codeclimate.com/github/emsk/redmine-notifier/badges/gpa.svg)](https://codeclimate.com/github/emsk/redmine-notifier)
-[![Inline docs](http://inch-ci.org/github/emsk/redmine-notifier.svg?branch=master)](http://inch-ci.org/github/emsk/redmine-notifier)
+[![Inline docs](http://inch-ci.org/github/emsk/redmine-notifier.svg?branch=main)](http://inch-ci.org/github/emsk/redmine-notifier)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
